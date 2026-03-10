@@ -4,22 +4,25 @@
 // @alledelweiss
 ?>
 
+<!-- not done i am kms -->
 <html>
     <head>
         <meta charset="UTF-8">
         <title>Centralized Scholarship Program</title>
-        <link rel="stylesheet" href="your-applications2.css">
+        <link rel="stylesheet" href="">
     </head>
     <body>
         <h3>[X] Centralized Scholarship Portal</h3>
-        <section>
+        
             <nav-1>
                 <!-- will edit once i know na 'yung file names mwa -->
                 <a href="#">Home</a> |
                 <a href="#">Scholarships</a> |
-                <a href="#">Your Applications</a> |
+                <a href="your-applications.php">Your Applications</a> |
                 <a href="#">Profile</a>
             </nav-1>
+
+        <section>
             <b><h2>Scholarship Name</h2></b>
             <p>Status: -----</p>
             
