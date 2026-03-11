@@ -6,7 +6,12 @@ body{
     padding: 18px 15px;
 }
 
-section{
+#logo {
+    width: 100px;
+    height: auto;   
+}
+
+#login{
     color: #778873;
     background-color: #D2DCB6;
     padding: 15px 35px;
