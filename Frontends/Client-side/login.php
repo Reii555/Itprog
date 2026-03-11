@@ -1,18 +1,20 @@
 <?php 
-// CLIENT-SIDE LOGIN PAGE
+// CLIENT-SIDE LOGIN PAGE 
 // Displays the login form and handles user authentication for student accounts in the CSP system.
-// @isabel cubs
+// @isabel cubangbang
 ?>
 
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Centralized Scholarship Program</title>
-        <link rel="stylesheet" href="client.css">
+        <title>Centralized Scholarship Program Login</title>
+        <link rel="stylesheet" href="client_login.css">
     </head>
     <body>
-        <h1>[X] Centralized Scholarship Portal</h1>
-        <section>
+        <header>
+            <img src="../icons/CSP_logo.png" id="logo" alt="logo icon">
+        </header>
+        <section id="login">
             <h3>Welcome Student!</h3>
 
             <p>Username</p>
