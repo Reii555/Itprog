@@ -13,7 +13,7 @@
     </head>
     <body>
         <h3>[X] Centralized Scholarship Portal</h3>
-
+            
             <nav-1>
                 <!-- will edit once i know na 'yung file names mwa -->
                 <a href="#">Home</a> |
@@ -21,8 +21,10 @@
                 <a href="your-applications.php">Your Applications</a> |
                 <a href="user-profile.php">Profile</a>
             </nav-1>
-
+        
             <br><h2>Your Applications</h2></br>
+
+            <h3>Select application to remove</h3> 
 
             <section>
                 <b>Scholarship Name</b>
@@ -30,9 +32,6 @@
                 <p>Deadline: -----</p>
                 <p>Submission Date: -----</p>
                 <p>Scholarship ID: -----</p>
-                <a href="your-applications-read.php">View Application</a>
-                <a href="application-form.php">Edit Application</a>
-                <a href="your-applications-delete.php">Delete Application</a>
             </section>
 
             <br><section>
@@ -41,10 +40,12 @@
                 <p>Deadline: -----</p>
                 <p>Submission Date: -----</p>
                 <p>Scholarship ID: -----</p>
-                <a href="your-applications-read.php">View Application</a>
-                <a href="application-form.php">Edit Application</a>
-                <a href="your-applications-delete.php">Delete Application</a>
             </section></br>
+
+            <!-- tapos once selected, json popup na sure ka ba yes -->
+            <!-- sha lang ba 'yung ass mag-document -->
+            <!-- holders lang 2 thank you po -->
+            <p>Delete ;P</p>
 
         <footer>
         <p>&copy; 2026 Centralized Scholarship Program</p>

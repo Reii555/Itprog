@@ -18,7 +18,7 @@
                 <a href="#">Home</a> |
                 <a href="#">Scholarships</a> |
                 <a href="your-applications.php">Your Applications</a> |
-                <a href="#">Profile</a>
+                <a href="user-profile.php">Profile</a>
             </nav-1>
         
             <section>
