@@ -1,4 +1,4 @@
-<?php 
+<?php  
 // CLIENT-SIDE HOME PAGE
 // Displays the home page of the CSP, which includes the ongoing scholarship and the users application.
 // @isabel cubangbang
