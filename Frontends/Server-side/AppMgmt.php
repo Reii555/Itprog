@@ -37,7 +37,24 @@
         </select>
     </div>
     
-<!-- teka ayaw guman ng localhost/phpadmin kouh...-->
+    <div class="table-container">
+        <table>
+        <tr>
+            <th>Application ID | </th>
+            <th>Student ID | </th>
+            <th>Scholarship | </th>
+            <th>Current Status | </th>
+            <th>Submitted on | </th>
+            <th>Reviewed by</th>
+        </tr>
+        
+        </table>
+    </div>
 
+    <br>
+
+    <div class="go-back">
+        <button onclick="window.location.href='#'">Go Back</button>
+    </div>
 </body>
 </html>
