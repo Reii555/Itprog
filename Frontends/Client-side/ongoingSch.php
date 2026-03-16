@@ -16,7 +16,7 @@
                 <h1>Centralized Scholarship Portal</h1>
             </section>
             <nav>
-                <a id="active" href="home.php">Home</a>
+                <a href="home.php">Home</a>
                 <a href="scholarList.php">Scholarships</a>      
                 <a>Your Applications</a>    <!-- insert href link to users application page -->
                 <a>Profile</a>              <!-- insert href link to user profile page -->

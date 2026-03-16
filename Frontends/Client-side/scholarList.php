@@ -45,7 +45,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
                 <section class="scholarshipBox">
                     <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
@@ -53,7 +53,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
                 <section class="scholarshipBox">
                     <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
@@ -61,7 +61,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
             </section>
         </section>
@@ -87,13 +87,13 @@
                     <h5>Scholarship Name</h5>
                     <p>Start Date: xx xx, xxxx</p>
                     <p>Deadline: xx xx, xxxx</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view past scholarship page -->
+                    <a class="buttons" href="pastSch.php">View Details</a> <!-- insert href link to view past scholarship page -->
                 </section>
                 <section class="scholarshipBox">
                     <h5>Scholarship Name</h5>
                     <p>Start Date: xx xx, xxxx</p>
                     <p>Deadline: xx xx, xxxx</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view past scholarship page -->
+                    <a class="buttons" href="pastSch.php">View Details</a> <!-- insert href link to view past scholarship page -->
                 </section>
             </section>
         </section>

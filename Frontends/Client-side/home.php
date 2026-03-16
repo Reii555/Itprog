@@ -43,7 +43,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
                 <section class="scholarshipBox">
                     <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
@@ -51,7 +51,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
                 <section class="scholarshipBox">
                     <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
@@ -59,7 +59,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
             </section>
             <a class="buttons2" href="scholarList.php">View All Scholarships</a>

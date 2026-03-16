@@ -119,9 +119,10 @@ p{
 
 #pastLabel{
     background-color:#a6b5a3;
-    color: #d12a2a;
+    color: #F1F3E0;
     font-style: italic;
-    font-size: 13px;
+    font-weight: bold;
+    font-size: 15px;
     border-radius: 10px;
     padding: 10px 15px;
     margin-bottom: 0;
