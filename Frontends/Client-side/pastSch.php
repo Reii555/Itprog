@@ -1,6 +1,6 @@
 <?php  
 // CLIENT-SIDE HOME PAGE
-// Displays the home page of the CSP, which includes a few number of ongoing scholarships and the users applications.
+// Displays the details of past scholarships.
 ?>
 
 <html>
