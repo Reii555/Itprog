@@ -1,6 +1,7 @@
 <?php  
 // CLIENT-SIDE SCHOLARSHIP LISTING PAGE
 // A centralized page to view all of the ongoing, upcoming, and past scholarships.
+// @isabel cubs
 ?>
 
 <html>
@@ -17,9 +18,9 @@
             </section>
             <nav>
                 <a href="home.php">Home</a>
-                <a id="active" href="scholarList.php">Scholarships</a>         <!-- insert href link to scholarship listing page -->
-                <a>Your Applications</a>    <!-- insert href link to users application page -->
-                <a>Profile</a>              <!-- insert href link to user profile page -->
+                <a id="active" href="scholarList.php">Scholarships</a>      
+                <a href="your-applications.php">Your Applications</a> |
+                <a href="user-profile.php">Profile</a>
             </nav>
         </header>
 
@@ -117,8 +118,8 @@
                     <h5>Links</h5>
                     <a href="home.php">Home</a>                
                     <a href="scholarList.php">Scholarships</a>       
-                    <a>Your Applications</a>    <!-- insert href link to ? page -->
-                    <a>Profile</a>              <!-- insert href link to ? page -->
+                    <a href="your-applications.php">Your Applications</a>   
+                    <a href="user-profile.php">Profile</a>          
                 </section>
                 <section>
                     <h5>Contact us</h5>

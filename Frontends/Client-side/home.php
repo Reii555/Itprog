@@ -1,6 +1,7 @@
 <?php  
 // CLIENT-SIDE HOME PAGE
 // Displays the home page of the CSP, which includes a few number of ongoing scholarships and the users applications.
+// @isabel cubs
 ?>
 
 <html>
@@ -18,8 +19,8 @@
             <nav>
                 <a id="active" href="home.php">Home</a>
                 <a href="scholarList.php">Scholarships</a>      
-                <a>Your Applications</a>    <!-- insert href link to users application page -->
-                <a>Profile</a>              <!-- insert href link to user profile page -->
+                <a href="your-applications.php">Your Applications</a> |
+                <a href="user-profile.php">Profile</a>
             </nav>
         </header>
 
@@ -43,7 +44,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> 
                 </section>
                 <section class="scholarshipBox">
                     <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
@@ -51,7 +52,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> 
                 </section>
                 <section class="scholarshipBox">
                     <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
@@ -59,7 +60,7 @@
                     <p class="deadlineText">Deadline: xx xx, xxxx</p>
                     <p>Department/Sponsor</p>
                     <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <a class="buttons" href="ongoingSch.php">View Details</a> 
                 </section>
             </section>
             <a class="buttons2" href="scholarList.php">View All Scholarships</a>
@@ -74,8 +75,8 @@
                     <p class="deadlineText2">Deadline: xx xx, xxxx</p>
                     <p>Submitted on: xx xx, xxxx</p>
                     <section class="appButtons">
-                        <a class="buttons2">View Applications</a>
-                        <a class="buttons2">Edit Applications</a>
+                        <a class="buttons2">View Applications</a> <!-- insert href link to view applications page -->
+                        <a class="buttons2">Edit Applications</a> <!-- insert href link to edit applications page -->
                     </section>  
                 </section>
                 <section class="appsBox">
@@ -84,12 +85,12 @@
                     <p class="deadlineText2">Deadline: xx xx, xxxx</p>
                     <p>Submitted on: xx xx, xxxx</p>
                     <section class="appButtons">
-                        <a class="buttons2">View Applications</a>
-                        <a class="buttons2">Edit Applications</a>
+                        <a class="buttons2">View Applications</a>  <!-- insert href link to view applications page -->
+                        <a class="buttons2">Edit Applications</a>  <!-- insert href link to edit applications page -->
                     </section>  
                 </section>
             </section>
-             <a class="buttons3">View All Applications</a> <!-- insert href link to your applications page -->
+             <a class="buttons3" href="your-applications.php">View All Applications</a>
         </section>
 
         <footer>
@@ -111,8 +112,8 @@
                     <h5>Links</h5>
                     <a href="home.php">Home</a>                
                     <a href="scholarList.php">Scholarships</a>       
-                    <a>Your Applications</a>    <!-- insert href link to ? page -->
-                    <a>Profile</a>              <!-- insert href link to ? page -->
+                    <a href="your-applications.php">Your Applications</a>   
+                    <a href="user-profile.php">Profile</a>      
                 </section>
                 <section>
                     <h5>Contact us</h5>

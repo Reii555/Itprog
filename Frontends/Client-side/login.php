@@ -1,6 +1,7 @@
 <?php 
 // CLIENT-SIDE LOGIN PAGE 
 // Displays the login form and handles user authentication for student accounts in the CSP system.
+// @isabel cubs
 ?>
 
 <html>
