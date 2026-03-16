@@ -48,20 +48,40 @@ nav a:hover{
     text-decoration: underline;
 }
 
-#homeSection{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 105px;
-    gap: 40px;
+#scholarshipBox{
+    margin: 30px 105px;
+    padding: 30px 50px;
+    background-color: #93a190;
+    border-radius: 10px;
+    color: #F1F3E0;
 }
 
-#homeSection section{
-    flex: 1;
+#detailBox{
+    border-radius: 10px;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
 }
 
-h3 {
-    font-size: 45px;
+#detailBox section{
+    background-color: #a6b5a3;
+    padding: 15px 30px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#detailBox p{
+    font-weight: bold;
+}
+
+li{
+    font-size: 17px;
+}
+
+h4 {
+    font-size: 30px;
+    margin-top: 20px;
     margin-bottom: 0;
 }
 
@@ -86,114 +106,9 @@ p{
     background-color: #62725e;
 }
 
-.buttons2{
-    font-size: 15px;
-    font-weight: bold;
-    display: block;
-    width: fit-content;
-    margin: 15px auto;
-    padding: 13px 20px;
-    background-color: #D2DCB6;
-    color: #778873;
-    text-decoration: none;
-    border-radius: 10px;
-}
-
-.buttons2:hover{
-    background-color: #b8c1a0;
-}
-
-
 .homeImage{
     min-width: 550px;
     max-height: 250px;
-}
-
-h4 {
-    font-size: 30px;
-    margin: 15px 0 20px;
-}
-
-#ongoingSection{
-    background-color: #778873;
-    color: #F1F3E0;
-    align-items: center;
-    padding: 20px 105px;
-    margin-top: 30px;
-}
-
-.schImage{
-    width: 100%;
-    max-width: 150px;
-    height: auto;
-}
-
-.ongoingContainer{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-}
-
-.scholarshipBox{
-    background-color: #93a190;
-    border-radius: 15px;
-    padding: 35px;
-}
-
-h5{
-    font-size: 25px;
-    margin: 9px 0;
-}
-
-.scholarshipBox p{
-    font-size: 16px;
-    margin: 8px 0;
-}
-
-#appsSection{
-    color: #778873;
-    align-items: center;
-    padding: 20px 105px;
-}
-
-.appsContainer{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    color: #F1F3E0;
-}
-
-.appsBox{
-    background-color: #778873;
-    border-radius: 15px;
-    padding: 35px;
-}
-
-.appButtons{
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.appButtons .buttons2{
-    margin: 0;
-}
-
-.buttons3{
-    font-size: 15px;
-    font-weight: bold;
-    display: block;
-    width: fit-content;
-    margin: 15px auto;
-    padding: 13px 20px;
-    background-color: #778873;
-    color: #F1F3E0;
-    text-decoration: none;
-    border-radius: 10px;
-}
-
-.buttons3:hover{
-    background-color: #62725e;
 }
 
 .deadlineText{
@@ -202,10 +117,14 @@ h5{
     font-style: italic;
 }
 
-.deadlineText2{
-    color: #bc2828;
-    font-weight: bold;
+#pastLabel{
+    background-color:#a6b5a3;
+    color: #d12a2a;
     font-style: italic;
+    font-size: 13px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-bottom: 0;
 }
 
 footer{

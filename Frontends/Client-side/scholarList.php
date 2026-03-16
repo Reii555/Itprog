@@ -1,13 +1,13 @@
 <?php  
-// CLIENT-SIDE HOME PAGE
-// Displays the home page of the CSP, which includes a few number of ongoing scholarships and the users applications.
+// CLIENT-SIDE SCHOLARSHIP LISTING PAGE
+// A centralized page to view all of the ongoing, upcoming, and past scholarships.
 ?>
 
 <html>
     <head>
         <meta charset="UTF-8">
         <title>Centralized Scholarship Program</title>
-        <link rel="stylesheet" href="client_home.css">
+        <link rel="stylesheet" href="client_scholarList.css">
     </head>
     <body>
         <header>
@@ -16,21 +16,23 @@
                 <h1>Centralized Scholarship Portal</h1>
             </section>
             <nav>
-                <a id="active" href="home.php">Home</a>
-                <a href="scholarList.php">Scholarships</a>      
+                <a href="home.php">Home</a>
+                <a id="active" href="scholarList.php">Scholarships</a>         <!-- insert href link to scholarship listing page -->
                 <a>Your Applications</a>    <!-- insert href link to users application page -->
                 <a>Profile</a>              <!-- insert href link to user profile page -->
             </nav>
         </header>
 
-        <section id="homeSection">
+        <section id="heading">
+            <h3>Scholarship Listings</h3>
+        </section>
+
+        <section id="jumpSection">
+            <p>jump to:</p>
             <section>
-                <h3>Find & Apply for Scholarships</h3>
-                <p>Access updated information on ongoing and upcoming scholarship opportunities in one centralized platform.</p>
-                <a class="buttons" href="scholarList.php">Scholarship Listing</a>
-            </section>
-            <section>
-                <img src="../icons/temp_image.png" class="homeImage" alt="Scholarship Image">
+                <a class="buttons1" href="#ongoingSection">Ongoing</a>
+                <a class="buttons1" href="#upcomingSection">Upcoming</a>
+                <a class="buttons1" href="#pastSection">Past</a>
             </section>
         </section>
 
@@ -62,34 +64,38 @@
                     <a class="buttons">View Details</a> <!-- insert href link to view ongoing scholarship page -->
                 </section>
             </section>
-            <a class="buttons2" href="scholarList.php">View All Scholarships</a>
         </section>
 
-        <section id="appsSection">
-            <h4>Your Applications</h4>
-            <section class="appsContainer">
-                <section class="appsBox">
+        <section id="upcomingSection">
+            <h4>Upcoming Scholarships</h4>
+            <section class="upcomingContainer">
+                <section class="scholarshipBox">
                     <h5>Scholarship Name</h5>
-                    <p>Status: ---</p>
-                    <p class="deadlineText2">Deadline: xx xx, xxxx</p>
-                    <p>Submitted on: xx xx, xxxx</p>
-                    <section class="appButtons">
-                        <a class="buttons2">View Applications</a>
-                        <a class="buttons2">Edit Applications</a>
-                    </section>  
+                    <p>Release Date: xx xx, xxxx</p>
                 </section>
-                <section class="appsBox">
+                <section class="scholarshipBox">
                     <h5>Scholarship Name</h5>
-                    <p>Status: ---</p>
-                    <p class="deadlineText2">Deadline: xx xx, xxxx</p>
-                    <p>Submitted on: xx xx, xxxx</p>
-                    <section class="appButtons">
-                        <a class="buttons2">View Applications</a>
-                        <a class="buttons2">Edit Applications</a>
-                    </section>  
+                    <p>Release Date: xx xx, xxxx</p>
                 </section>
             </section>
-             <a class="buttons3">View All Applications</a> <!-- insert href link to your applications page -->
+        </section>
+
+        <section id="pastSection">
+            <h4>Past Scholarships</h4>
+            <section class="pastContainer">
+                <section class="scholarshipBox">
+                    <h5>Scholarship Name</h5>
+                    <p>Start Date: xx xx, xxxx</p>
+                    <p>Deadline: xx xx, xxxx</p>
+                    <a class="buttons">View Details</a> <!-- insert href link to view past scholarship page -->
+                </section>
+                <section class="scholarshipBox">
+                    <h5>Scholarship Name</h5>
+                    <p>Start Date: xx xx, xxxx</p>
+                    <p>Deadline: xx xx, xxxx</p>
+                    <a class="buttons">View Details</a> <!-- insert href link to view past scholarship page -->
+                </section>
+            </section>
         </section>
 
         <footer>
