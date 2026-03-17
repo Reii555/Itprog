@@ -1,12 +1,5 @@
 <?php
-include("db_connect.php");
-
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $accountID = $_POST['accountID'];
-    $password = $_POST['password'];
-
-    $query = "SELECT * FROM ACCOUNTS WHERE accountID='$accountID' AND password='$password'";
-}
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +30,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </form>
 
             <p>Forgot password? Submit a ticket <a href="test.html">here.</a></p>
+
+            <?php
+                if(isset($_SESSION['error'])){
+                    echo "<p>" . $_SESSION['error'] . "</p>";
+                    unset($_SESSION['error']);
+                }
+            ?>
         </main>
     </body>
 </html>
