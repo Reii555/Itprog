@@ -1,3 +1,14 @@
+<?php
+include("db_connect.php");
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $accountID = $_POST['accountID'];
+    $password = $_POST['password'];
+
+    $query = "SELECT * FROM ACCOUNTS WHERE accountID='$accountID' AND password='$password'";
+}
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
