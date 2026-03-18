@@ -65,16 +65,25 @@ h1{
   display: inline-block;
 }
 
-.Advanced-Filter, .Clear-Filter {
+.Advanced-Filter{
   padding: 8px 16px;
   border: 1px solid #ddd;
   background: #f0f0f0;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
 }
 
-/* Dropdown content (hidden by default) */
+.Clear-Filter {
+padding: 8px 8px;
+  border: 1px solid #cf6363;
+  background: #cf6363;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+}
+
 .dropdown-content {
   display: none;
   position: absolute;
@@ -94,7 +103,6 @@ h1{
   display: block;
 }
 
-/* Optional: Add a small arrow on top of dropdown */
 .dropdown-content::before {
   content: '';
   position: absolute;
@@ -178,7 +186,7 @@ h1{
 }
 
 .table-container {
-  margin-top: 30px;
+  margin-top: 10px;
   background: white;
   border-radius: 12px;
   padding: 4px;
@@ -194,7 +202,6 @@ table {
   min-width: 900px;
 }
 
-/* Style for header row */
 tr:first-child {
   background: #f5f7fa;
   border-bottom: 2px solid #D2DCB6;
@@ -210,26 +217,22 @@ th {
   white-space: nowrap;
 }
 
-/* Style for data rows (when you add them) */
 td {
   padding: 14px 12px;
   color: #4a5568;
   border-bottom: 1px solid #edf2f7;
 }
 
-/* Hover effect on rows */
 tr:hover td {
   background-color: #f8fafc;
 }
 
-/* Empty cell styling */
 td:empty::before {
   content: "—";
   color: #cbd5e0;
   font-style: italic;
 }
 
-/* Zebra striping for rows after the header */
 tr:not(:first-child):nth-child(even) {
   background-color: #fafbfc;
 }

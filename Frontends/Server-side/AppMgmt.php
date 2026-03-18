@@ -30,6 +30,8 @@
   </div>
 </div>
 
+<br>
+
 <!-- Advanced Filtering -->
 
 <div class="Adv-Filtr">
@@ -78,8 +80,6 @@
   
   <button class="Clear-Filter">Clear Filter/s</button>
 </div>
-
-<br>
 
 <!-- Applications Table -->
 
