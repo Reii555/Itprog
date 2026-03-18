@@ -233,3 +233,12 @@ td:empty::before {
 tr:not(:first-child):nth-child(even) {
   background-color: #fafbfc;
 }
+
+.go-back button{
+  padding: 8px 16px;
+  border: 1px solid #556152;
+  background: #556152;
+  border-radius: 20px;
+  font-size: 14px;
+  color: white;
+}
