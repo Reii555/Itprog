@@ -1,7 +1,235 @@
-.card-stats{
-
+body {
+    font-family: 'Verdana', sans-serif;
+    color: #ffffff;
+    background-color: #778873;
+    padding: 18px 15px;
 }
 
-.card{
-    
+.header{
+    margin-bottom: 20px;
+}
+
+h1{
+    font-size: 27px;
+    color: #778873;
+    background-color: #D2DCB6;
+    text-align: left;
+    padding: 5px 15px;   
+    margin-left: -22px;   
+    margin-right: -15px;  
+    width: calc(100% + 30px);
+}
+
+.card-stats {
+  background-color: #D2DCB6;
+  border-radius: 12px; /* Rounded corners for the container */
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional shadow for depth */
+  display: flex;
+  justify-content: center;
+}
+
+.stats-inner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  
+}
+
+.card-stats .card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0;
+}
+
+.card-stats .card h2 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #666;
+  font-weight: normal;
+}
+
+.card-stats .card p {
+  margin: 0;
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.Advanced-Filter, .Clear-Filter {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+  background: white;
+  min-width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 16px;
+  z-index: 1000;
+}
+
+/* Show dropdown on hover */
+.filter-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Optional: Add a small arrow on top of dropdown */
+.dropdown-content::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #666;
+}
+
+.date-sorts {
+  display: flex;
+  gap: 8px;
+}
+
+.date-sorts button {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.date-sorts button:hover {
+  background: #f5f5f5;
+}
+
+.dropdown-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.dropdown-footer button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.clear-filters {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.apply-filters {
+  background: #34a853;
+  border: none;
+  color: white;
+}
+
+.dropdown-footer button:hover {
+  opacity: 0.9;
+}
+
+.table-container {
+  margin-top: 30px;
+  background: white;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 900px;
+}
+
+/* Style for header row */
+tr:first-child {
+  background: #f5f7fa;
+  border-bottom: 2px solid #D2DCB6;
+}
+
+th {
+  text-align: left;
+  padding: 16px 12px;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+/* Style for data rows (when you add them) */
+td {
+  padding: 14px 12px;
+  color: #4a5568;
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* Hover effect on rows */
+tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Empty cell styling */
+td:empty::before {
+  content: "—";
+  color: #cbd5e0;
+  font-style: italic;
+}
+
+/* Zebra striping for rows after the header */
+tr:not(:first-child):nth-child(even) {
+  background-color: #fafbfc;
 }
