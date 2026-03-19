@@ -19,7 +19,7 @@ body {
 
 .CSP-logo {
     width: auto;
-    height: 75px;  /* Match your text size */
+    height: 75px;
     object-fit: contain;
     flex-shrink: 0;
 }
@@ -43,10 +43,10 @@ h1{
 
 .card-stats {
   background-color: #D2DCB6;
-  border-radius: 12px; /* Rounded corners for the container */
+  border-radius: 12px; 
   padding: 24px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional shadow for depth */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
   display: flex;
   justify-content: center;
 }
@@ -119,7 +119,6 @@ padding: 8px 8px;
   z-index: 1000;
 }
 
-/* Show dropdown on hover */
 .filter-dropdown:hover .dropdown-content {
   display: block;
 }
