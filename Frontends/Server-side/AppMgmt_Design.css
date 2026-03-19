@@ -5,8 +5,29 @@ body {
     padding: 18px 15px;
 }
 
-.header{
+.header {
+    background-color: #6b7a68;
     margin-bottom: 20px;
+    padding: 10px 15px;
+    margin-top: -26px;
+    margin-left: -22px;
+    margin-right: -22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.CSP-logo {
+    width: auto;
+    height: 75px;  /* Match your text size */
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.header h3 {
+    margin: 0;
+    color: white;
+    font-size: 16px;
 }
 
 h1{

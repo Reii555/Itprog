@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="AppMgmt_Design.css">
 <body>
     <section class="header">
-      <h3>Centralized Scholarship Portal / Admin Navigation / Application Management</h3>
+    <img src="../icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
+    <h3>Centralized Scholarship Portal / Admin Navigation / Application Management</h3>
     </section>
 
     <h1>Application Management</h1>
