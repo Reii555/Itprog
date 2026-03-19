@@ -9,7 +9,13 @@
         <h3>Centralized Scholarship Portal / Admin Navigation</h3>
     </div>
 
+    <br>
+
     <h1>Dashboard</h1>
+
+    <section class="dashboard-settings">
+        
+    </section>
 
     <section class="dashboard-stats-holder">
         <section class="dashboard-stats">
