@@ -55,5 +55,33 @@
             </section>
         </section>
     </section>
+
+<section class="action-cards-grid">
+    <div class="action-row">
+        <div class="action-card">
+            <div class="card-icon">
+                <!-- Logo will go here -->
+            </div>
+            <h3>Manage Scholarships</h3>
+        </div>
+
+        <div class="action-card">
+            <div class="card-icon">
+                <!-- Logo will go here -->
+            </div>
+            <h3>Review Applications</h3>
+        </div>
+    </div>
+
+    <div class="action-row single">
+        <div class="action-card">
+            <div class="card-icon">
+                <!-- Logo will go here -->
+            </div>
+            <h3>Statistics & Reports</h3>
+        </div>
+    </div>
+</section>
+
 </body>
     </html>
