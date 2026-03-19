@@ -11,10 +11,17 @@
 
     <br>
 
+    <section class="dashboard-n-settings">
     <h1>Dashboard</h1>
 
-    <section class="dashboard-settings">
-        
+    <div class="settings-dropdown">
+    <button class="settings-btn">Settings ▼</button>
+    <div class="dropdown-menu">
+        <a href="#" class="dropdown-item-logout">Logout</a>
+        <a href="#" class="dropdown-item">Call for IT Support</a>
+        </div>
+    </div>
+
     </section>
 
     <section class="dashboard-stats-holder">
