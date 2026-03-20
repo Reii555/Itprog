@@ -4,37 +4,61 @@ body {
     background-color: #778873;
     padding: 18px 15px;
 }
+.header {
+    background-color: #6b7a68;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    margin-top: -26px;
+    margin-left: -22px;
+    margin-right: -41px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.CSP-logo {
+    width: auto;
+    height: 75px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.header h3 {
+    margin: 0;
+    color: white;
+    font-size: 16px;
+}
 
 h1 {
     font-size: 27px;
     color: #778873;
     text-align: left;
     background-color: #D2DCB6;
-    padding: 5px 15px;    /* Keep text from touching edges */
-    margin-left: -22px;    /* Negative margin to counter body padding */
-    margin-right: -15px;   /* Negative margin to counter body padding */
-    width: calc(100% + 30px); /* Increase width to account for negative margins */
+    padding: 5px 15px;
+    margin-left: -22px;
+    margin-right: -15px;
+    width: calc(100% + 30px);
 }
 
 section.title-label {
-    text-align: left;  /* Keep label left-aligned */
+    text-align: left;  
     font-family: 'Verdana', sans-serif;
     color: #ffffff;
     background-color: #6b7a68;
-    padding: 5px 15px;    /* Keep text from touching edges */
-    margin-left: -22px;    /* Negative margin to counter body padding */
-    margin-right: -15px;   /* Negative margin to counter body padding */
-    width: calc(100% + 30px); /* Increase width to account for negative margins */
+    padding: 5px 15px;    
+    margin-left: -22px;    
+    margin-right: -15px;   
+    width: calc(100% + 30px); 
 }
 
 section.issue-form {
     width: fit-content;
     text-align: right;
     background-color: #6b7a68;
-    padding: 5px 15px;    /* Keep text from touching edges */
-    margin-left: -22px;    /* Negative margin to counter body padding */
-    margin-right: -15px;   /* Negative margin to counter body padding */
-    width: calc(100% + 30px); /* Increase width to account for negative margins */
+    padding: 5px 15px;    
+    margin-left: -22px;    
+    margin-right: -15px;   
+    width: calc(100% + 30px); 
 }
 
 textarea[name="issue"] {
@@ -43,8 +67,8 @@ textarea[name="issue"] {
     border: 2px solid #ccc;
     border-radius: 4px;
     font-family: 'Verdana', sans-serif;
-    display: block;            /* Makes textarea take full width */
-    margin-bottom: 10px;       /* Space before the button */
+    display: block;           
+    margin-bottom: 10px;       
 }
 
 button {
