@@ -231,6 +231,8 @@ footer p, footer a{
 footer a{
     display: block;
     padding: 9px 0;
+    color: #F1F3E0;
+    text-decoration: none;
 }
 
 footer p{
