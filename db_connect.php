@@ -190,7 +190,7 @@ if ($check_applications) {
             
             if (isset($student_ids[1]) && isset($scholarship_ids[1])) {
                 $insert4 = "INSERT INTO APPLICATIONS (student_id, scholarship_id, status, submission_date) 
-                           VALUES ({$student_ids[1]}, {$scholarship_ids[1]}, 'Draft', NULL)";
+                           VALUES ({$student_ids[1]}, {$scholarship_ids[1]}, 'Draft', NOW())";
                 mysqli_query($conn, $insert4);
             }
             
