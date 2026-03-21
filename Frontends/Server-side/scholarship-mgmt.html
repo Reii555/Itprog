@@ -1,3 +1,13 @@
+<?php
+session_chart();
+include("db_connect.php");
+
+if(!isset($_SESSION['account_id'])){
+    header("Location: ../frontend/login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
     <head>

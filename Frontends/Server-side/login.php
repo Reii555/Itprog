@@ -17,9 +17,9 @@ session_start();
 
         <main>
             <h2>Login to Dashboard</h2>
-            <form action="login.php" method="post">
-                <label for="accountID">Account ID</label><br>
-                <input type="text" id="accountID" name="accountID" required>
+            <form action="../backend/login_process.php" method="post">
+                <label for="email">Email</label><br>
+                <input type="text" id="email" name="email" required>
                 <br><br>
 
                 <label for="password">Password</label><br>
