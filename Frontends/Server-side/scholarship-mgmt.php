@@ -31,6 +31,7 @@ if(isset($_POST['add'])){
 
     if(mysqli_stmt_execute($stmt)){
         $msg = "Scholarship added successfully.";
+        $msg_type = "success";
     } else {
         $msg = "Error: " . mysqli_error($conn);
         $msg_type = "error";
@@ -194,7 +195,7 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                     <tbody>
                         <?php if($result && mysqli_num_rows($result) > 0): ?>
                             <?php while($row = mysqli_fetch_assoc($result)): ?>
-                                <tr onclick="selectedRow(this)"
+                                <tr onclick="selectRow(this)"
                                     data-id="<?php echo $row['scholarship_id']; ?>"
                                     data-title="<?php echo $row['title']; ?>"
                                     data-description="<?php echo $row['description']; ?>"
@@ -205,13 +206,13 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                                     <td><strong><?php echo htmlspecialchars($row['title']); ?></strong></td>
                                     <td>
                                         <?php 
-                                            echo htmlspecialchars(substr($row['description'], 0, 5));
+                                            echo htmlspecialchars(substr($row['description'], 0, 50));
                                             if(strlen($row['description']) > 50) { echo '...'; }
                                         ?>
                                     </td>
                                     <td><?php echo date('M d, Y', strtotime($row['deadline'])); ?></td>
                                     <td><span class="badge badge-<?php echo strtolower($row['release_status']); ?>"><?php echo $row['release_status']; ?></span></td>
-                                    <td><span class="badge badge-<?php echo strtolower($row['status']); ?>"><?php echo $row['status']; ?></span></td>
+                                    <td><span class="badge badge-<?php echo strtolower($row['status']); ?>"><?php echo ucfirst($row['status']); ?></span></td>
                                     <td><?php echo htmlspecialchars($row['creator'] ?? 'Admin'); ?></td>
                                     <td><?php echo date('M d, Y', strtotime($row['created_at'])); ?></td>
                                 </tr>
@@ -240,22 +241,22 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                     <span>Page <?php echo $page; ?> of <?php echo max(1, $total_pages); ?></span>
 
                     <?php if($page < $total_pages): ?>
-                        <a href="?page=<?php echo $page+1; ?>&search<?php echo urlencode($search); ?>&limit=<?php echo $limit; ?>">Next ›</a>
+                        <a href="?page=<?php echo $page+1; ?>&search=<?php echo urlencode($search); ?>&limit=<?php echo $limit; ?>">Next ›</a>
                     <?php else: ?>
                         <button disabled>Next ›</button>
                     <?php endif; ?>
 
                     <select onchange="changeLimit(this.value)">
                         <option value="10" <?php echo $limit == 10 ? 'selected' : ''; ?>>10</option>
-                        <option value="25" <?php echo $limit == 25 ? 'selected' : ''; ?>>10</option>
-                        <option value="50" <?php echo $limit == 50 ? 'selected' : ''; ?>>10</option>
+                        <option value="25" <?php echo $limit == 25 ? 'selected' : ''; ?>>25</option>
+                        <option value="50" <?php echo $limit == 50 ? 'selected' : ''; ?>>50</option>
                     </select>
                 </div>
             </div>
         </section>
 
         <!--add scholarship function-->
-        <section class="function" id="addScho">
+        <div class="function" id="addScho">
             <div class="function-content">
                 <div class="function-header">
                     <h3>Add Scholarship</h3>
@@ -285,18 +286,22 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                         <div class="form-group">
                             <label>Scholarship Status </label>
                             <select name="status">
+                                <option value="Completed">Completed</option>
                                 <option value="Ongoing">Ongoing</option>
                                 <option value="Upcoming">Upcoming</option>
-                                <option value="Closed">Closed</option>
                             </select>
                         </div>
                     </div>
+                    <div class="function-footer">
+                        <button type="button" onclick="closeAction('addScho')">Cancel</button>
+                        <button type="submit" name="add">Add Scholarship</button>
+                    </div>
                 </form>
             </div>
-        </section>
+        </div>
 
         <!-- edit scholarship function -->
-         <section class="function" id="editScho">
+         <div class="function" id="editScho">
             <div class="function-content">
                 <div class="function-header">
                     <h3>Edit Scholarship</h3>
@@ -306,7 +311,7 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                     <div class="function-body">
                         <input type="hidden" name="id" id="edit_id">
                         <div class="form-group">
-                            <Label>Scholarship Title *</label>
+                            <label>Scholarship Title *</label>
                             <input type="text" name="title" id="edit_title" placeholder="Scholarship Title" required>
                         </div>
                         <div class="form-group">
@@ -314,7 +319,7 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                             <textarea name="description" id="edit_description" placeholder="Description" required></textarea>
                         </div>
                         <div class="form-group">
-                            <Label>Deadline *</label>
+                            <label>Deadline *</label>
                             <input type="datetime-local" name="deadline" id="edit_deadline" required>
                         </div>
                         <div class="form-group">
@@ -327,22 +332,22 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                         <div class="form-group">
                             <label>Scholarship Status </label>
                             <select name="status" id="edit_status">
+                                <option value="Completed">Completed</option>
                                 <option value="Ongoing">Ongoing</option>
                                 <option value="Upcoming">Upcoming</option>
-                                <option value="Closed">Closed</option>
                             </select>
                         </div>
                     </div>
                     <div class="function-footer">
-                        <button type="button" onlick="closeAction('editScho')">Cancel</button>
+                        <button type="button" onclick="closeAction('editScho')">Cancel</button>
                         <button type="submit" name="edit">Save Changes</button>
                     </div>
                 </form>
             </div>
-         </section>
+        </div>
 
          <!-- delete selected scholarship section -->
-          <section class="function" id="deleteScho">
+          <div class="function" id="deleteScho">
             <div class="function-content">
                 <div class="function-header">
                     <h3>Confirm Delete</h3>
@@ -360,15 +365,15 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                     </div>
                 </form>
             </div>
-          </section>
+        </div>
 
           <script>
-            let selectRow = null;
+            let selectedRow = null;
 
             //select row function, for edit and delete scholarship function
             function selectRow(row){
                 //removes previous selection
-                document.querySelectorAll('tbody tr').foreach(r =>{
+                document.querySelectorAll('tbody tr').forEach(r => {
                     r.classList.remove('selected');
                 });
 
@@ -378,7 +383,7 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
 
                 //enables edit and delete buttons after selecting a row
                 document.getElementById('editButt').disabled = false;
-                document.getElementById('deleteButt').disabled = false;
+                document.getElementById('delButt').disabled = false;
             }
 
             //function to open the selected function (add/edit/delete)
@@ -395,22 +400,26 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                 if(type === 'add'){
                     document.getElementById('addScho').classList.add('show');
                 } else if(type === 'edit') {
-                    document.getElementById('edit_id').value = selectedRow.dataset.id;
-                    document.getElementById('edit_title').value = selectedRow.dataset.title;
-                    document.getElementById('edit_description').value = selectedRow.dataset.description;
-                    document.getElementById('edit_deadline').value = selectedRow.dataset.deadline;
-                    document.getElementById('edit_release').value = selectedRow.dataset.release;
-                    document.getElementById('edit_status').value = selectedRow.dataset.status;
-                    document.getElementById('editScho').classList.add('show');
+                    if(selectedRow && selectedRow.dataset){
+                        document.getElementById('edit_id').value = selectedRow.dataset.id;
+                        document.getElementById('edit_title').value = selectedRow.dataset.title;
+                        document.getElementById('edit_description').value = selectedRow.dataset.description;
+                        document.getElementById('edit_deadline').value = selectedRow.dataset.deadline;
+                        document.getElementById('edit_release').value = selectedRow.dataset.release;
+                        document.getElementById('edit_status').value = selectedRow.dataset.status;
+                        document.getElementById('editScho').classList.add('show');
+                    }
                 } else if(type === 'delete'){
-                    document.getElementById('delete_id').value = selectedRow.dataset.id;
-                    document.getElementById('delete_title').innerText = selectedRow.dataset.title;
-                    document.getElementById('deleteScho').classList.add('show');
+                    if(selectedRow && selectedRow.dataset){
+                        document.getElementById('delete_id').value = selectedRow.dataset.id;
+                        document.getElementById('delete_title').innerText = selectedRow.dataset.title;
+                        document.getElementById('deleteScho').classList.add('show');
+                    }
                 }
             }
 
             //closing the functions
-            function closeAction(modalID) {
+            function closeAction(modalId) {
                 document.getElementById(modalId).classList.remove('show');
             }
 
@@ -423,19 +432,24 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
             }
 
             //handle search on Enter key
-            document.querySelector('.searchbox input')?.addEventListener('keypress', function(e) {
-                if(e.key === 'Enter'){
-                    e.preventDefault();
-                    let url = new URL(window.location.href);
-                    url.searchParams.set('search', this.value);
-                    url.searchParams.set('page', 1);
-                    window.location.href = url;
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.querySelector('.searchbox input');
+                if(searchInput){
+                    searchInput.addEventListener('keypress', function(e) {
+                        if(e.key === 'Enter'){
+                            e.preventDefault();
+                            let url = new URL(window.location.href);
+                            url.searchParams.set('search', this.value);
+                            url.searchParams.set('page', 1);
+                            window.location.href = url;
+                        }
+                    });
                 }
             });
 
             //close modal when clicking outside the action area
             window.onclick = function(e){
-                if(e.target.classList.contains('modal')){
+                if(e.target.classList.contains('function')){
                     e.target.classList.remove('show');
                 }
             }
