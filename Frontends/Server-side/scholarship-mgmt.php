@@ -2,13 +2,13 @@
 session_start();
 include("../../db_connect.php");
 
-// Check login
+//check login
 if(!isset($_SESSION['account_id'])){
     header("Location: ../../frontend/Server-side/login.php");
     exit();
 }
 
-// Get admin ID
+//get admin ID
 $admin_id = null;
 $admin_query = mysqli_query($conn, "SELECT admin_id FROM administrators WHERE account_id = '" .
                 mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
@@ -17,7 +17,7 @@ if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_id = $admin_data['admin_id'];
 }
 
-// Add scholarship function
+//add scholarship function
 if(isset($_POST['add'])){
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
@@ -31,7 +31,6 @@ if(isset($_POST['add'])){
 
     if(mysqli_stmt_execute($stmt)){
         $msg = "Scholarship added successfully.";
-        $msg_type = "success";
     } else {
         $msg = "Error: " . mysqli_error($conn);
         $msg_type = "error";
@@ -39,7 +38,7 @@ if(isset($_POST['add'])){
     mysqli_stmt_close($stmt);
 }
 
-// Edit scholarship function - FIXED: changed POST to $_POST
+//edit scholarship function
 if(isset($_POST['edit'])){
     $id = (int)$_POST['id'];
     $title = mysqli_real_escape_string($conn, $_POST['title']);
@@ -61,7 +60,7 @@ if(isset($_POST['edit'])){
     mysqli_stmt_close($stmt);
 }
 
-// Delete scholarship function
+//delete scholarship function
 if(isset($_POST['delete'])){
     $id = (int)$_POST['id'];
 
@@ -78,7 +77,7 @@ if(isset($_POST['delete'])){
     mysqli_stmt_close($stmt);
 }
 
-// Search using GET method
+//search using GET method
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
@@ -89,14 +88,14 @@ if($search != ""){
     $where = "WHERE title LIKE '%$search%' OR description LIKE '%$search%'";
 }
 
-// Get total count for pagination
+//get total count for pagination
 $count_query = "SELECT COUNT(*) as total FROM scholarships $where";
 $count_result = mysqli_query($conn, $count_query);
 $total_row = mysqli_fetch_assoc($count_result);
 $total_items = $total_row['total'];
 $total_pages = ($total_items > 0) ? ceil($total_items / $limit) : 1;
 
-// Get scholarships with admin creator name - FIXED: SCHOLARSHIP to scholarships, scholarship_if to scholarship_id
+//get scholarships with admin creator name (w/ LEFT JOIN)
 $query = "SELECT s.*, CONCAT(a.first_name, ' ', a.last_name) as creator
         FROM scholarships s
         LEFT JOIN administrators a ON s.created_by = a.admin_id
@@ -105,7 +104,7 @@ $query = "SELECT s.*, CONCAT(a.first_name, ' ', a.last_name) as creator
         LIMIT $offset, $limit";
 $result = mysqli_query($conn, $query);
 
-// Get the statistics for summary table
+//get the statistics for summary table
 $total_result = mysqli_query($conn, "SELECT COUNT(*) as c FROM scholarships");
 $total = mysqli_fetch_assoc($total_result)['c'];
 
@@ -120,11 +119,10 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
 <html>
     <head>
         <title>Manage Scholarships</title>
-        <link rel="stylesheet" href="css/manage_scholarships.css">
+        <!--will add css link later-->
     </head>
 
     <body>
-        <!-- Header Section -->
         <section class="header">
             <img src="logo.png" alt="logo" width="60" height="60">
             <div class="header-title">
@@ -133,24 +131,24 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
             <span> / <a href="test.html">Dashboard</a> / Manage Scholarships</span>
         </section>
 
-        <!-- Page Title Section -->
         <section class="page-title">
             <h2>Scholarship Management</h2>
         </section>
 
-        <!-- Statistics Section -->
         <section class="summary">
             <h3 class="visually-hidden">Scholarship Statistics</h3>
             <div class="stat-card">
                 <h3>Total Scholarships</h3>
                 <p><?php echo $total; ?></p>
             </div>
+
             <div class="stat-card">
                 <h3>Published</h3>
                 <p><?php echo $published; ?></p>
             </div>
+
             <div class="stat-card">
-                <h3>Ongoing</h3>
+                <h3>Total Ongoing</h3>
                 <p><?php echo $ongoing; ?></p>
             </div>
         </section>
@@ -158,25 +156,26 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
         <!-- Messages Section -->
         <?php if(isset($msg)): ?>
             <section class="message message-<?php echo $msg_type; ?>">
-                <p><?php echo $msg; ?></p> 
+                <p><?php echo $msg; ?></p>
             </section>
         <?php endif; ?>
 
         <!-- Control Panel Section -->
-        <section class="control-panel">
-            <h3 class="visually-hidden">Search and Scholarship Actions</h3>
+         <section class="control-panel">
+            <h3 class="visually-hidden">Search and Actions</h3>
             <form method="GET" class="searchbox">
-                <input type="search" name="search" placeholder="Search Scholarships..." value="<?php echo htmlspecialchars($search); ?>">
+                <input type="search" name="search" placeholder="Search Scholarship..." value="<?php echo htmlspecialchars($search); ?>">
             </form>
-            <div class="action-buttons">
-                <button type="button" class="butt-add" onclick="openModal('add')">+ Add Scholarship</button>
-                <button type="button" class="butt-edit" id="editBtn" onclick="openModal('edit')" disabled>Edit</button>
-                <button type="button" class="butt-del" id="deleteBtn" onclick="openModal('delete')" disabled>Delete</button>
-            </div>
-        </section>
 
-        <!-- scholarships table section -->
-        <section class="scholarships-table">
+            <div class="action-button">
+                <button type="button" class="butt-add" id="addButt" onclick="openAction('add')">+ Add Scholarship</button>
+                <button type="button" class="butt-edit" id="editButt" onclick="openAction('edit')" disabled>Edit</button>
+                <button type="button" class="butt-del" id="delButt" onclick="openAction('delete')" disabled>Delete</button>
+            </div>
+         </section>
+
+         <!--Scholarships Table Section -->
+         <section class="scholarships-table">
             <h3 class="visually-hidden">Scholarships List</h3>
             <div class="table-wrapper">
                 <table>
@@ -195,10 +194,10 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                     <tbody>
                         <?php if($result && mysqli_num_rows($result) > 0): ?>
                             <?php while($row = mysqli_fetch_assoc($result)): ?>
-                                <tr onclick="selectRow(this)"
+                                <tr onclick="selectedRow(this)"
                                     data-id="<?php echo $row['scholarship_id']; ?>"
-                                    data-title="<?php echo htmlspecialchars($row['title']); ?>"
-                                    data-description="<?php echo htmlspecialchars($row['description']); ?>"
+                                    data-title="<?php echo $row['title']; ?>"
+                                    data-description="<?php echo $row['description']; ?>"
                                     data-deadline="<?php echo date('Y-m-d\TH:i', strtotime($row['deadline'])); ?>"
                                     data-release="<?php echo $row['release_status']; ?>"
                                     data-status="<?php echo $row['status']; ?>">
@@ -206,7 +205,7 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                                     <td><strong><?php echo htmlspecialchars($row['title']); ?></strong></td>
                                     <td>
                                         <?php 
-                                            echo htmlspecialchars(substr($row['description'], 0, 50));
+                                            echo htmlspecialchars(substr($row['description'], 0, 5));
                                             if(strlen($row['description']) > 50) { echo '...'; }
                                         ?>
                                     </td>
@@ -217,19 +216,19 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                                     <td><?php echo date('M d, Y', strtotime($row['created_at'])); ?></td>
                                 </tr>
                             <?php endwhile; ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <tr class="empty-row">
-                                <td colspan="8">No scholarships found. Click "Add Scholarship" to create one.</td>
+                                <td colspan="8">No scholarships found. To create one, click "Add Scholarship".</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
             </div>
 
-            <!-- Pagination Section -->
-            <div class="pagination">
+            <!-- pagination -->
+             <div class="pagination">
                 <div class="pagination-info">
-                    Showing <?php echo $offset + 1; ?> - <?php echo min($offset + $limit, $total_items); ?> out of <?php echo $total_items; ?> items
+                    Showing <?php echo $offset + 1; ?> - <?php echo min($offset + $limit, $total_items); ?> out of  <?php echo $total_items; ?> items
                 </div>
                 <div class="pagination-controls">
                     <?php if($page > 1): ?>
@@ -237,54 +236,54 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                     <?php else: ?>
                         <button disabled>‹ Prev</button>
                     <?php endif; ?>
-                    
+
                     <span>Page <?php echo $page; ?> of <?php echo max(1, $total_pages); ?></span>
-                    
+
                     <?php if($page < $total_pages): ?>
-                        <a href="?page=<?php echo $page+1; ?>&search=<?php echo urlencode($search); ?>&limit=<?php echo $limit; ?>">Next ›</a>
+                        <a href="?page=<?php echo $page+1; ?>&search<?php echo urlencode($search); ?>&limit=<?php echo $limit; ?>">Next ›</a>
                     <?php else: ?>
                         <button disabled>Next ›</button>
                     <?php endif; ?>
-                    
+
                     <select onchange="changeLimit(this.value)">
-                        <option value="10" <?php echo $limit == 10 ? 'selected' : ''; ?>>10 per page</option>
-                        <option value="25" <?php echo $limit == 25 ? 'selected' : ''; ?>>25 per page</option>
-                        <option value="50" <?php echo $limit == 50 ? 'selected' : ''; ?>>50 per page</option>
+                        <option value="10" <?php echo $limit == 10 ? 'selected' : ''; ?>>10</option>
+                        <option value="25" <?php echo $limit == 25 ? 'selected' : ''; ?>>10</option>
+                        <option value="50" <?php echo $limit == 50 ? 'selected' : ''; ?>>10</option>
                     </select>
                 </div>
             </div>
         </section>
 
-        <!-- add scholarship function -->
-        <section class="modal" id="addModal">
-            <div class="modal-content">
-                <div class="modal-header">
+        <!--add scholarship function-->
+        <section class="function" id="addScho">
+            <div class="function-content">
+                <div class="function-header">
                     <h3>Add Scholarship</h3>
-                    <span class="close" onclick="closeModal('addModal')">&times;</span>
+                    <span class="close" onclick="closeAction('addScho')">&times;</span>
                 </div>
                 <form method="POST">
-                    <div class="modal-body">
+                    <div class="function-body">
                         <div class="form-group">
                             <label>Scholarship Title *</label>
                             <input type="text" name="title" placeholder="Scholarship Title" required>
                         </div>
                         <div class="form-group">
                             <label>Description *</label>
-                            <textarea name="description" placeholder="Description" required></textarea>
+                            <textarea name="description" placeholder="Add description" required></textarea>
                         </div>
                         <div class="form-group">
                             <label>Deadline *</label>
                             <input type="datetime-local" name="deadline" required>
                         </div>
                         <div class="form-group">
-                            <label>Release Status</label>
+                            <label>Release Status </label>
                             <select name="release_status">
                                 <option value="Published">Published</option>
                                 <option value="Draft">Draft</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Scholarship Status</label>
+                            <label>Scholarship Status </label>
                             <select name="status">
                                 <option value="Ongoing">Ongoing</option>
                                 <option value="Upcoming">Upcoming</option>
@@ -292,45 +291,41 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" onclick="closeModal('addModal')">Cancel</button>
-                        <button type="submit" name="add">Add Scholarship</button>
-                    </div>
                 </form>
             </div>
         </section>
 
-        <!--edit modal section -->
-        <section class="modal" id="editModal">
-            <div class="modal-content">
-                <div class="modal-header">
+        <!-- edit scholarship function -->
+         <section class="function" id="editScho">
+            <div class="function-content">
+                <div class="function-header">
                     <h3>Edit Scholarship</h3>
-                    <span class="close" onclick="closeModal('editModal')">&times;</span>
+                    <span class="close" onclick="closeAction('editScho')">&times;</span>
                 </div>
                 <form method="POST">
-                    <div class="modal-body">
+                    <div class="function-body">
                         <input type="hidden" name="id" id="edit_id">
                         <div class="form-group">
-                            <label>Scholarship Title *</label>
+                            <Label>Scholarship Title *</label>
                             <input type="text" name="title" id="edit_title" placeholder="Scholarship Title" required>
                         </div>
                         <div class="form-group">
-                            <label>Description *</label>
+                            <Label>Description *</label>
                             <textarea name="description" id="edit_description" placeholder="Description" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label>Deadline *</label>
+                            <Label>Deadline *</label>
                             <input type="datetime-local" name="deadline" id="edit_deadline" required>
                         </div>
                         <div class="form-group">
-                            <label>Release Status</label>
+                            <label>Release Status </label>
                             <select name="release_status" id="edit_release">
                                 <option value="Published">Published</option>
                                 <option value="Draft">Draft</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Scholarship Status</label>
+                            <label>Scholarship Status </label>
                             <select name="status" id="edit_status">
                                 <option value="Ongoing">Ongoing</option>
                                 <option value="Upcoming">Upcoming</option>
@@ -338,115 +333,112 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" onclick="closeModal('editModal')">Cancel</button>
+                    <div class="function-footer">
+                        <button type="button" onlick="closeAction('editScho')">Cancel</button>
                         <button type="submit" name="edit">Save Changes</button>
                     </div>
                 </form>
             </div>
-        </section>
+         </section>
 
-        <!-- delete scholarship section -->
-        <section class="modal" id="deleteModal">
-            <div class="modal-content">
-                <div class="modal-header">
+         <!-- delete selected scholarship section -->
+          <section class="function" id="deleteScho">
+            <div class="function-content">
+                <div class="function-header">
                     <h3>Confirm Delete</h3>
-                    <span class="close" onclick="closeModal('deleteModal')">&times;</span>
+                    <span class="close" onclick="closeAction('deleteScho')">&times;</span>
                 </div>
                 <form method="POST">
-                    <div class="modal-body">
+                    <div class="function-body">
                         <input type="hidden" name="id" id="delete_id">
                         <p>Are you sure you want to delete <strong id="delete_title"></strong>?</p>
-                        <p class="warning-text">⚠️ This action cannot be undone.</p>
+                        <p class="warning-text">This action cannot be undone.</p>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" onclick="closeModal('deleteModal')">Cancel</button>
-                        <button type="submit" name="delete">Delete Permanently</button>
+                    <div class="function-footer">
+                        <button type="button" onclick="closeAction('deleteScho')">Cancel</button>
+                        <button type="submit" name="delete">Delete</button>
                     </div>
                 </form>
             </div>
-        </section>
+          </section>
 
-        <script>
-        let selectedRow = null;
+          <script>
+            let selectRow = null;
 
-        //selects row
-        function selectRow(row) {
-            // Remove previous selection
-            document.querySelectorAll('tbody tr').forEach(r => {
-                r.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked row
-            row.classList.add('selected');
-            selectedRow = row;
-            
-            // Enable edit and delete buttons
-            document.getElementById('editBtn').disabled = false;
-            document.getElementById('deleteBtn').disabled = false;
-        }
+            //select row function, for edit and delete scholarship function
+            function selectRow(row){
+                //removes previous selection
+                document.querySelectorAll('tbody tr').foreach(r =>{
+                    r.classList.remove('selected');
+                });
 
-        //open modals, types are Add, Edit, and Delete
-        function openModal(type) {
-            if(type === 'edit' && !selectedRow) {
-                alert('Please select a scholarship first');
-                return;
+                //add selected class to clicked row
+                row.classList.add('selected');
+                selectedRow = row;
+
+                //enables edit and delete buttons after selecting a row
+                document.getElementById('editButt').disabled = false;
+                document.getElementById('deleteButt').disabled = false;
             }
-            if(type === 'delete' && !selectedRow) {
-                alert('Please select a scholarship first');
-                return;
-            }
-            
-            if(type === 'add') {
-                document.getElementById('addModal').classList.add('show');
-            }
-            else if(type === 'edit') {
-                // Fill edit form with selected data
-                document.getElementById('edit_id').value = selectedRow.dataset.id;
-                document.getElementById('edit_title').value = selectedRow.dataset.title;
-                document.getElementById('edit_description').value = selectedRow.dataset.description;
-                document.getElementById('edit_deadline').value = selectedRow.dataset.deadline;
-                document.getElementById('edit_release').value = selectedRow.dataset.release;
-                document.getElementById('edit_status').value = selectedRow.dataset.status;
-                document.getElementById('editModal').classList.add('show');
-            }
-            else if(type === 'delete') {
-                document.getElementById('delete_id').value = selectedRow.dataset.id;
-                document.getElementById('delete_title').innerText = selectedRow.dataset.title;
-                document.getElementById('deleteModal').classList.add('show');
-            }
-        }
 
-        //close modal
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
+            //function to open the selected function (add/edit/delete)
+            function openAction(type){
+                if(type === 'edit' && !selectedRow){
+                    alert('Please select a scholarship first');
+                    return;
+                }
+                if(type === 'delete' && !selectedRow){
+                    alert('Please select a scholarship first');
+                    return;
+                }
 
-        //change items per page
-        function changeLimit(limit) {
-            let url = new URL(window.location.href);
-            url.searchParams.set('limit', limit);
-            url.searchParams.set('page', 1);
-            window.location.href = url;
-        }
+                if(type === 'add'){
+                    document.getElementById('addScho').classList.add('show');
+                } else if(type === 'edit') {
+                    document.getElementById('edit_id').value = selectedRow.dataset.id;
+                    document.getElementById('edit_title').value = selectedRow.dataset.title;
+                    document.getElementById('edit_description').value = selectedRow.dataset.description;
+                    document.getElementById('edit_deadline').value = selectedRow.dataset.deadline;
+                    document.getElementById('edit_release').value = selectedRow.dataset.release;
+                    document.getElementById('edit_status').value = selectedRow.dataset.status;
+                    document.getElementById('editScho').classList.add('show');
+                } else if(type === 'delete'){
+                    document.getElementById('delete_id').value = selectedRow.dataset.id;
+                    document.getElementById('delete_title').innerText = selectedRow.dataset.title;
+                    document.getElementById('deleteScho').classList.add('show');
+                }
+            }
 
-        //handle search on Enter key
-        document.querySelector('.searchbox input')?.addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') {
-                e.preventDefault();
+            //closing the functions
+            function closeAction(modalID) {
+                document.getElementById(modalId).classList.remove('show');
+            }
+
+            //change items per page
+            function changeLimit(limit){
                 let url = new URL(window.location.href);
-                url.searchParams.set('search', this.value);
+                url.searchParams.set('limit', limit);
                 url.searchParams.set('page', 1);
-                window.location.href = url;
+                window.location.href = url; //new URL
             }
-        });
 
-        // Close modal when clicking outside
-        window.onclick = function(e) {
-            if(e.target.classList.contains('modal')) {
-                e.target.classList.remove('show');
+            //handle search on Enter key
+            document.querySelector('.searchbox input')?.addEventListener('keypress', function(e) {
+                if(e.key === 'Enter'){
+                    e.preventDefault();
+                    let url = new URL(window.location.href);
+                    url.searchParams.set('search', this.value);
+                    url.searchParams.set('page', 1);
+                    window.location.href = url;
+                }
+            });
+
+            //close modal when clicking outside the action area
+            window.onclick = function(e){
+                if(e.target.classList.contains('modal')){
+                    e.target.classList.remove('show');
+                }
             }
-        }
-        </script>
+          </script>
     </body>
 </html>
