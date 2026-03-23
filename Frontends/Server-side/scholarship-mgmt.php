@@ -119,7 +119,7 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
 <html>
     <head>
         <title>Manage Scholarships</title>
-        <!--will add css link later-->
+        <link rel="stylesheet" href="ScholMgmt_Design.css">
     </head>
 
     <body>
