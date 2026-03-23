@@ -125,15 +125,26 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
 
     <body>
         <section class="header">
-            <img src="logo.png" alt="logo" width="60" height="60">
+            <img src="../icons/CSP_logo.png" alt="logo" width="60" height="60" class="CSP-logo">
             <div class="header-title">
                 <h1>Centralized Scholarship Portal</h1>
             </div>
-            <span> / <a href="test.html">Dashboard</a> / Manage Scholarships</span>
+            <span> / <a href="Server_Dashboard.php">Dashboard</a> / Manage Scholarships</span>
         </section>
 
         <section class="page-title">
             <h2>Scholarship Management</h2>
+        </section>
+
+        <!--settings for IT support and logout -->
+        <section class="settings">
+            <div class="settings-dropdown">
+                <button class="settings-butt">Settings ▼</button>
+                <div class="dropdown-menu">
+                   <a href="#" class="dropdown-item-logout">Logout</a>
+                   <a href="#" class="dropdown-item">Call for IT Support</a>
+                </div>
+            </div>
         </section>
 
         <section class="summary">
