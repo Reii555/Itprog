@@ -8,8 +8,15 @@ if(!isset($_SESSION['account_id'])){
 }
 
 $admin_id = null;
-$admin_query = mysqli_query($conn, "SELECT account_id FROM accounts WHERE account_id = '" .
-               mysqli_real_escape_string($conn, $_SESSION['account_id']) ."'");
+$admin_query = mysqli_query($conn, "SELECT admin_id FROM administrators WHERE account_id = '" .
+                mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
+if($admin_query && mysqli_num_rows($admin_query) > 0){
+    $admin_data = mysqli_fetch_assoc($admin_query);
+    $admin_id = $admin_data['admin_id'];
+}
+
+$admin_name_query = "SELECT CONCAT(first_name, ' ', last_name) as full_name FROM administrators
+ WHERE account_id = '" . mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'";
 
 if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_data = mysqli_fetch_assoc($admin_query);
