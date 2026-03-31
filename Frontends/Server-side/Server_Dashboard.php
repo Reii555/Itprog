@@ -18,10 +18,20 @@
     <div class="settings-dropdown">
     <button class="settings-btn">Settings ▼</button>
     <div class="dropdown-menu">
-        <a href="#" class="dropdown-item-logout">Logout</a>
-        <a href="#" class="dropdown-item">Call for IT Support</a>
+        <a href="#" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
+        <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
         </div>
     </div>
+
+    <script>
+        function confirmLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "logout.php"; 
+                return true;
+            }
+            return false;
+        }
+    </script>
 
     </section>
 
