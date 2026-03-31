@@ -97,10 +97,19 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
     </head>
     <body>
         <header>
-            <img src="logo.png" alt="Logo" width="60" height="60">
+            <img src="../../Frontends/icons/CSP_logo.png" alt="CSP_logo" width="60" height="60">
             <strong>Centralized Scholarship Portal</strong>
-            <span> / <a href="test.html">Dashboard</a> / Statistics & Reports</span>
+            <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
         </header>
+
+            <div class="settings-dropdown">
+                <button class="settings-btn">Settings ▼</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
+                    <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
+                </div>
+            </div>
+
 
         <hr>
 
@@ -195,7 +204,6 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
                     <thead>
                         <tr>
                             <th>Scholarship</th>
-                            <th>Slots</th>
                             <th>Applicants</th>
                             <th>Approved</th>
                             <th>Deadline</th>
@@ -207,7 +215,6 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
                             <?php foreach($schol_report_data as $scholarship): ?>
                                 <tr>
                                     <td><strong><?php echo htmlspecialchars($scholarship['title']); ?></strong></td>
-                                    <td><?php echo $scholarship['slots'] ?? 'Unlimited'; ?></td>
                                     <td><?php echo $scholarship['total_applicants']; ?></td>
                                     <td><?php echo $scholarship['approved_count']; ?></td>
                                     <td><?php echo date('M d, Y', strtotime($scholarship['deadline'])); ?></td>
