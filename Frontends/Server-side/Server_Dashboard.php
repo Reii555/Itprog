@@ -69,34 +69,34 @@
 
 <section class="action-cards-grid">
     <div class="action-row">
-        <div class="action-card">
+        <a href="scholarship-mgmt.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
                     <img src="../icons/temp_image.png" alt="Manage Scholarships" class="card-icon">
                 </div>
                 <h3>Manage Scholarships</h3>
             </div>
-        </div>
+        </a>
 
-        <div class="action-card">
+        <a href="AppMgmt.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
                     <img src="../icons/temp_image.png" alt="Review Applications" class="card-icon">
                 </div>
                 <h3>Review Applications</h3>
             </div>
-        </div>
+        </a>
     </div>
 
     <div class="action-row single">
-        <div class="action-card">
+        <a href="statistics_reports.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
                     <img src="../icons/temp_image.png" alt="Statistics & Reports" class="card-icon">
                 </div>
                 <h3>Statistics & Reports</h3>
             </div>
-        </div>
+        </a>
     </div>
 </section>
 
