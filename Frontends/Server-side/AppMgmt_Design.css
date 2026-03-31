@@ -17,6 +17,16 @@ body {
     gap: 12px;
 }
 
+.header a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.header a:hover {
+    text-decoration: underline;
+}
+
 .CSP-logo {
     width: auto;
     height: 75px;

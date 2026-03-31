@@ -121,7 +121,8 @@ if(!empty($params)) {
 <body>
     <section class="header">
     <img src="../icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
-    <h3>Centralized Scholarship Portal / Admin Navigation / Application Management</h3>
+            <strong>Centralized Scholarship Portal</strong>
+            <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
     </section>
 
     <h1>Application Management</h1>
