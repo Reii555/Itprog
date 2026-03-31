@@ -26,7 +26,7 @@ $total_scholarships = mysqli_fetch_assoc($total_scholarships_query)['total'];
 $total_applicants_query = mysqli_query($conn, "SELECT COUNT(DISTINCT student_id) as total FROM applications");
 $total_applicants = mysqli_fetch_assoc($total_applicants_query)['total'];
 
-//application status for pie chart
+//application status for bar graph
 $status_count_query = mysqli_query($conn, "SELECT status, COUNT(*) as count FROM applications GROUP BY status");
 $status_data = [];
 while($row = mysqli_fetch_assoc($status_count_query)){
@@ -93,7 +93,7 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
 <html>
     <head>
         <title>Statistics & Reports</title>
-        <link rel="stylesheet" href="StatisticsReports_design.css">
+        <link rel="stylesheet" href="stats_report_design.css">
     </head>
     <body>
         <header>
