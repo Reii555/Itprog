@@ -26,7 +26,7 @@ if($admin_query && mysqli_num_rows($admin_query) > 0){
 
 //Get statistics
 //Total scholarships
-$total_scholarships_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM applications");
+$total_scholarships_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM scholarships");
 $total_scholarships = mysqli_fetch_assoc($total_scholarships_query)['total'];
 
 //Total applicants (unique in students who applied)
@@ -41,11 +41,10 @@ while($row = mysqli_fetch_assoc($status_count_query)){
 }
 
 //applications per scholarship for bar graph
-$app_per_schol = "SELECT status, COUNT(a.application_id) as applicant_count
+$app_per_schol = "SELECT s.title, COUNT(a.application_id) as applicant_count
                     FROM scholarships s
                     LEFT JOIN applications a ON s.scholarship_id = a.scholarship_id
-                    GROUP BY s.scholarship_id, a.status
-                    ORDER BY applicant_count DESC";
+                    GROUP BY s.scholarship_id";
 $app_per_schol_query = mysqli_query($conn, $app_per_schol);
 $scholarship_applications = [];
 while($row = mysqli_fetch_assoc($app_per_schol_query)){
