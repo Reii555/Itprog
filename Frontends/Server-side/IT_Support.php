@@ -19,10 +19,75 @@
         <h3>Specify issue</h3>
     </section>
 
-    <section class="issue-form">
-        <textarea name="issue" rows="5" cols="50" required></textarea>        
-        </br>
-        <button type="submit">Send out a ticket</button>
-    </section>  
+   <section class="issue-form">
+    <form id="ticketForm" onsubmit="return submitTicket(event)">
+        <div class="form-container">
+            <textarea name="issue" id="issueText" rows="8" cols="50" required></textarea>
+            <div class="button-wrapper">
+                <button type="submit" class="submit-btn">Send out a ticket</button>
+            </div>
+        </div>
+    </form>
+    
+     <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ticket Submitted !!</h3>
+            </div>
+            <div class="modal-body">
+                <p>For more inquiries contact: <strong>IT Support Hotline</strong></p>
+                <p class="contact-number">Phone no.: (63+) 1234-5678</p>
+                <p class="contact-email"><strong>Email: itsupport@csp.edu.ph</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitTicket(event) {
+            event.preventDefault(); // Prevent form from actually submitting
+            
+            const issueText = document.getElementById('issueText').value;
+            
+            if (issueText.trim() === "") {
+                alert("Please describe your issue before submitting.");
+                return false;
+            }
+            
+            // Show the confirmation modal
+            showModal();
+            
+            document.getElementById('issueText').value = "";
+            
+            return false;
+        }
+        
+        function showModal() {
+            const modal = document.getElementById('confirmationModal');
+            modal.style.display = 'block';
+            
+            // Auto-close after 5 seconds
+            setTimeout(function() {
+                closeModal();
+            }, 5000);
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('confirmationModal');
+            modal.style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('confirmationModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
 </body>
 </html>
