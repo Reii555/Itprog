@@ -41,8 +41,11 @@
                 <p class="contact-email"><strong>Email: itsupport@csp.edu.ph</strong></p>
             </div>
             <div class="modal-footer">
-                <button onclick="closeModal()">Close</button>
+                <button onclick="closeModal()">Submit another Ticket?</button>
+                <button onclick="window.location.href='Server_Dashboard.php'">Go to Dashboard</button>
+
             </div>
+            
         </div>
     </div>
 
@@ -69,10 +72,10 @@
             const modal = document.getElementById('confirmationModal');
             modal.style.display = 'block';
             
-            // Auto-close after 5 seconds
+            // Auto-close after 10 seconds
             setTimeout(function() {
                 closeModal();
-            }, 5000);
+            }, 10000);
         }
         
         function closeModal() {
