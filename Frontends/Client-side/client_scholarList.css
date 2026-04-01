@@ -174,6 +174,10 @@ h5{
     color: #F1F3E0;
 }
 
+.upcomingContainer #none{
+    color: #778873;
+}
+
 .upcomingContainer .scholarshipBox{
     background-color: #778873;
     border-radius: 15px;
@@ -181,7 +185,7 @@ h5{
 }
 
 .deadlineText{
-    color: #d12a2a;
+    color: #ab1d1d;
     font-weight: bold;
     font-style: italic;
 }

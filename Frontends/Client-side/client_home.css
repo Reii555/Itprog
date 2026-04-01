@@ -118,7 +118,7 @@ h4 {
     background-color: #778873;
     color: #F1F3E0;
     align-items: center;
-    padding: 20px 105px;
+    padding: 20px 105px 30px;
     margin-top: 30px;
 }
 
@@ -150,6 +150,12 @@ h5{
     margin: 8px 0;
 }
 
+#ongoingSection p, #appsSection p{
+    font-size: 15px;
+    margin: 15px 1px 10px;
+    font-style: italic;
+}
+
 #appsSection{
     color: #778873;
     align-items: center;
@@ -161,6 +167,10 @@ h5{
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
     color: #F1F3E0;
+}
+
+.appsContainer #none{
+    color: #62725e;
 }
 
 .appsBox{
@@ -197,13 +207,7 @@ h5{
 }
 
 .deadlineText{
-    color: #d12a2a;
-    font-weight: bold;
-    font-style: italic;
-}
-
-.deadlineText2{
-    color: #bc2828;
+    color: #ab1d1d;
     font-weight: bold;
     font-style: italic;
 }

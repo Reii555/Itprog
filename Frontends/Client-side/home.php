@@ -1,7 +1,28 @@
 <?php  
 // CLIENT-SIDE HOME PAGE
-// Displays the home page of the CSP, which includes a few number of ongoing scholarships and the users applications.
+// Displays the home page of the CSP, showing ongoing scholarships and the user's applications.
 // @isabel cubs
+
+session_start();
+include("../../db_connect.php");
+
+if(!isset($_SESSION['account_id'])){
+    header("Location: login.php");
+    exit();
+}
+
+$getOngoingSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Ongoing' ORDER BY deadline ASC LIMIT 3";
+$ongoingSc = mysqli_query($conn, $getOngoingSc);
+
+$account_id = $_SESSION['account_id'];
+$getStudID = "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'";
+$StudID = mysqli_query($conn, $getStudID);
+$cell = mysqli_fetch_assoc($StudID);
+$student_id = $cell['student_id'];
+
+$getApp = "SELECT * FROM APPLICATIONS WHERE student_id='$student_id' ORDER BY submission_date DESC LIMIT 3";
+$AppSc = mysqli_query($conn, $getApp);
+
 ?>
 
 <html>
@@ -17,8 +38,8 @@
                 <h1>Centralized Scholarship Portal</h1>
             </section>
             <nav>
-                <a id="active" href="home.php">Home</a>
-                <a href="scholarList.php">Scholarships</a>      
+                <a id="active" href="home.php">Home</a> |
+                <a href="scholarList.php">Scholarships</a> |      
                 <a href="your-applications.php">Your Applications</a> |
                 <a href="user-profile.php">Profile</a>
             </nav>
@@ -31,66 +52,65 @@
                 <a class="buttons" href="scholarList.php">Scholarship Listing</a>
             </section>
             <section>
-                <img src="../icons/temp_image.png" class="homeImage" alt="Scholarship Image">
             </section>
         </section>
 
         <section id="ongoingSection">
             <h4>Ongoing Scholarships</h4>
             <section class="ongoingContainer">
+                <?php
+                if(mysqli_num_rows($ongoingSc) > 0){
+                    while($row = mysqli_fetch_assoc($ongoingSc)){
+                ?>
+
                 <section class="scholarshipBox">
-                    <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
-                    <h5>Scholarship Name</h5>
-                    <p class="deadlineText">Deadline: xx xx, xxxx</p>
-                    <p>Department/Sponsor</p>
-                    <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> 
+                    <h5><?php echo $row['title']; ?></h5>
+                    <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
+                    <p><?php echo $row['description']; ?></p>
+
+                    <a class="buttons" href="ongoingSch.php?id=<?php echo $row['scholarship_id']; ?>">View Details</a> 
                 </section>
-                <section class="scholarshipBox">
-                    <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
-                    <h5>Scholarship Name</h5>
-                    <p class="deadlineText">Deadline: xx xx, xxxx</p>
-                    <p>Department/Sponsor</p>
-                    <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> 
-                </section>
-                <section class="scholarshipBox">
-                    <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
-                    <h5>Scholarship Name</h5>
-                    <p class="deadlineText">Deadline: xx xx, xxxx</p>
-                    <p>Department/Sponsor</p>
-                    <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> 
-                </section>
-            </section>
-            <a class="buttons2" href="scholarList.php">View All Scholarships</a>
+                <?php
+                    }
+                echo "</section>";
+                echo "<a class='buttons2' href='scholarList.php'>View All Scholarships</a>";
+
+                } else {
+                   echo "<p>No ongoing scholarships available.</p>";
+                    echo "</section>";
+                }
+                ?>
         </section>
 
         <section id="appsSection">
             <h4>Your Applications</h4>
             <section class="appsContainer">
+                <?php
+                if(mysqli_num_rows($AppSc) > 0){
+                    while($row = mysqli_fetch_assoc($AppSc)){
+                ?>
+
                 <section class="appsBox">
-                    <h5>Scholarship Name</h5>
-                    <p>Status: ---</p>
-                    <p class="deadlineText2">Deadline: xx xx, xxxx</p>
-                    <p>Submitted on: xx xx, xxxx</p>
+                    <h5><?php echo $row['scholarship_name']; ?></h5>
+                    <p>Status: <?php echo $row['status']; ?></p>
+                    <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
+                    <p>Submitted on: <?php echo $row['submission_date']; ?></p>
                     <section class="appButtons">
-                        <a class="buttons2">View Applications</a> <!-- insert href link to view applications page -->
-                        <a class="buttons2">Edit Applications</a> <!-- insert href link to edit applications page -->
+                        <a class="buttons2" href="viewApplication.php?id=<?php echo $row['application_id']; ?>">View Application</a>
+                        <a class="buttons2" href="editApplication.php?id=<?php echo $row['application_id']; ?>">Edit Application</a>
                     </section>  
                 </section>
-                <section class="appsBox">
-                    <h5>Scholarship Name</h5>
-                    <p>Status: ---</p>
-                    <p class="deadlineText2">Deadline: xx xx, xxxx</p>
-                    <p>Submitted on: xx xx, xxxx</p>
-                    <section class="appButtons">
-                        <a class="buttons2">View Applications</a>  <!-- insert href link to view applications page -->
-                        <a class="buttons2">Edit Applications</a>  <!-- insert href link to edit applications page -->
-                    </section>  
-                </section>
-            </section>
-             <a class="buttons3" href="your-applications.php">View All Applications</a>
+
+                <?php
+                    }
+                echo "</section>";
+                echo "<a class='buttons3' href='your-applications.php'>View All Applications</a>";
+
+                } else {
+                    echo "<p id='none'>No applications yet.</p>";
+                    echo "</section>";
+                }
+                ?>
         </section>
 
         <footer>
@@ -117,9 +137,8 @@
                 </section>
                 <section>
                     <h5>Contact us</h5>
-                    <p>Phone number: xxx-xxx-xxxx</p>
-                    <p>Email: xxxx@xxxxx.xxx</p>
-                    <p>(social media links)</p>
+                    <p>Phone no.: (63+) 1234-5678</p>
+                    <p>Email: itsupport@csp.edu.ph</p>
                 </section>
             </section>
 

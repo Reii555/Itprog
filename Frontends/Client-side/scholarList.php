@@ -2,12 +2,29 @@
 // CLIENT-SIDE SCHOLARSHIP LISTING PAGE
 // A centralized page to view all of the ongoing, upcoming, and past scholarships.
 // @isabel cubs
+
+session_start();
+include("../../db_connect.php");
+
+if(!isset($_SESSION['account_id'])){
+    header("Location: login.php");
+    exit();
+}
+
+$getOngoingSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Ongoing' ORDER BY deadline ASC";
+$ongoingSc = mysqli_query($conn, $getOngoingSc);
+
+$getUpSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Upcoming'";
+$upSc = mysqli_query($conn, $getUpSc);
+
+$getPastSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Completed' ORDER BY deadline ASC";
+$pastSc = mysqli_query($conn, $getPastSc);
 ?>
 
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Centralized Scholarship Program</title>
+        <title>Scholarship Listing - Centralized Scholarship Program</title>
         <link rel="stylesheet" href="client_scholarList.css">
     </head>
     <body>
@@ -17,10 +34,10 @@
                 <h1>Centralized Scholarship Portal</h1>
             </section>
             <nav>
-                <a href="home.php">Home</a>
-                <a id="active" href="scholarList.php">Scholarships</a>      
+                <a href="home.php">Home</a> |
+                <a id="active" href="scholarList.php">Scholarships</a> |      
                 <a href="your-applications.php">Your Applications</a> |
-                <a href="user-profile.php">Profile</a>
+                <a href="user-profile.php">Profile</a> |
             </nav>
         </header>
 
@@ -40,62 +57,72 @@
         <section id="ongoingSection">
             <h4>Ongoing Scholarships</h4>
             <section class="ongoingContainer">
+                <?php
+                if(mysqli_num_rows($ongoingSc) > 0){
+                    while($row = mysqli_fetch_assoc($ongoingSc)){
+                ?>
+
                 <section class="scholarshipBox">
-                    <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
-                    <h5>Scholarship Name</h5>
-                    <p class="deadlineText">Deadline: xx xx, xxxx</p>
-                    <p>Department/Sponsor</p>
-                    <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
+                    <h5><?php echo $row['title']; ?></h5>
+                    <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
+                    <p><?php echo $row['description']; ?></p>
+
+                    <a class="buttons" href="ongoingSch.php?id=<?php echo $row['scholarship_id']; ?>">View Details</a> 
                 </section>
-                <section class="scholarshipBox">
-                    <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
-                    <h5>Scholarship Name</h5>
-                    <p class="deadlineText">Deadline: xx xx, xxxx</p>
-                    <p>Department/Sponsor</p>
-                    <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
-                </section>
-                <section class="scholarshipBox">
-                    <img src="../icons/temp_image.png" class="schImage" alt="Scholarship Image">
-                    <h5>Scholarship Name</h5>
-                    <p class="deadlineText">Deadline: xx xx, xxxx</p>
-                    <p>Department/Sponsor</p>
-                    <p>(short description)</p>
-                    <a class="buttons" href="ongoingSch.php">View Details</a> <!-- insert href link to view ongoing scholarship page -->
-                </section>
+
+                <?php
+                    }
+                } else {
+                    echo "<p>No ongoing scholarships available.</p>";
+                }
+                ?>
             </section>
         </section>
 
         <section id="upcomingSection">
             <h4>Upcoming Scholarships</h4>
             <section class="upcomingContainer">
+                <?php
+                if(mysqli_num_rows($upSc) > 0){
+                    while($row = mysqli_fetch_assoc($upSc)){
+                ?>
+
                 <section class="scholarshipBox">
-                    <h5>Scholarship Name</h5>
-                    <p>Release Date: xx xx, xxxx</p>
+                    <h5><?php echo $row['title']; ?></h5>
+                    <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
+                    <p><?php echo $row['description']; ?></p>
                 </section>
-                <section class="scholarshipBox">
-                    <h5>Scholarship Name</h5>
-                    <p>Release Date: xx xx, xxxx</p>
-                </section>
+
+                <?php
+                    }
+                } else {
+                    echo "<p id='none'>No upcoming scholarships available.</p>";
+                }
+                ?>
             </section>
         </section>
 
         <section id="pastSection">
             <h4>Past Scholarships</h4>
             <section class="pastContainer">
+                <?php
+                if(mysqli_num_rows($pastSc) > 0){
+                    while($row = mysqli_fetch_assoc($pastSc)){
+                ?>
+
                 <section class="scholarshipBox">
-                    <h5>Scholarship Name</h5>
-                    <p>Start Date: xx xx, xxxx</p>
-                    <p>Deadline: xx xx, xxxx</p>
-                    <a class="buttons" href="pastSch.php">View Details</a> <!-- insert href link to view past scholarship page -->
+                    <h5><?php echo $row['title']; ?></h5>
+                    <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
+                    <p><?php echo $row['description']; ?></p>
+                    <a class="buttons" href="pastSch.php?id=<?php echo $row['scholarship_id']; ?>">View Details</a> 
                 </section>
-                <section class="scholarshipBox">
-                    <h5>Scholarship Name</h5>
-                    <p>Start Date: xx xx, xxxx</p>
-                    <p>Deadline: xx xx, xxxx</p>
-                    <a class="buttons" href="pastSch.php">View Details</a> <!-- insert href link to view past scholarship page -->
-                </section>
+
+                <?php
+                    }
+                } else {
+                    echo "<p>No completed scholarships available.</p>";
+                }
+                ?>
             </section>
         </section>
 
@@ -123,9 +150,8 @@
                 </section>
                 <section>
                     <h5>Contact us</h5>
-                    <p>Phone number: xxx-xxx-xxxx</p>
-                    <p>Email: xxxx@xxxxx.xxx</p>
-                    <p>(social media links)</p>
+                    <p>Phone no.: (63+) 1234-5678</p>
+                    <p>Email: itsupport@csp.edu.ph</p>
                 </section>
             </section>
 

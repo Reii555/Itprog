@@ -1,0 +1,70 @@
+/* client_support.css */
+
+body{
+    font-family: 'Verdana', sans-serif;
+    font-size: 11px;
+    color: #778873;
+    background-color: #F1F3E0;
+    margin: 0;
+}
+
+header{
+    color: white;
+    background-color: #778873;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+#logo {
+    width: 100px;
+    height: auto;
+}
+
+#itSupport{
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #93a190;
+    padding: 40px;
+    border-radius: 15px;
+    color: #F1F3E0;
+    text-align: center;
+}
+
+#itSupport h3{
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+#itSupport p{
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+#itSupport textarea{
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    resize: vertical;
+    margin-bottom: 20px;
+}
+
+#itSupport input[type="submit"]{
+    font-size: 15px;
+    font-weight: bold;
+    padding: 13px 20px;
+    background-color: #778873;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+#itSupport input[type="submit"]:hover{
+    background-color: #62725e;
+}

@@ -2,12 +2,37 @@
 // CLIENT-SIDE HOME PAGE
 // Displays the details of past scholarships.
 // @isabel cubs
+
+session_start();
+include("../../db_connect.php");
+
+if(!isset($_SESSION['account_id'])){
+    header("Location: login.php");
+    exit();
+}
+
+if(!isset($_GET['id'])){
+    echo "No scholarship selected.";
+    exit();
+}
+
+$scholarship_id = $_GET['id'];
+
+$getScholar = "SELECT * FROM SCHOLARSHIPS WHERE scholarship_id='$scholarship_id'";
+$result = mysqli_query($conn, $getScholar);
+
+if(mysqli_num_rows($result) == 0){
+    echo "Scholarship not found.";
+    exit();
+}
+
+$scholar = mysqli_fetch_assoc($result);
 ?>
 
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Centralized Scholarship Program</title>
+        <title><?php echo $scholar['title']; ?> - Centralized Scholarship Program</title>
         <link rel="stylesheet" href="client_scholarship.css">
     </head>
     <body>
@@ -17,8 +42,8 @@
                 <h1>Centralized Scholarship Portal</h1>
             </section>
             <nav>
-                <a href="home.php">Home</a>
-                <a href="scholarList.php">Scholarships</a>      
+                <a href="home.php">Home</a> |
+                <a href="scholarList.php">Scholarships</a> |
                 <a href="your-applications.php">Your Applications</a> |
                 <a href="user-profile.php">Profile</a>
             </nav>
@@ -26,23 +51,35 @@
 
         <section id="scholarshipBox">
             <p id="pastLabel">Past Scholarship</p>
-            <h4>Scholarship Name</h4>
-            <p class="deadlineText">Deadline: xx xx, xxxx</p>
-            <p>Department/Sponsor: ---</p>
-            <p>Contact Person: ---</p>
-            <p>(short description)</p>
+
+            <h4><?php echo $scholar['title']; ?></h4>
+            <p class="deadlineText">Deadline: <?php echo $scholar['deadline']; ?></p>
+            <p><?php echo $scholar['description']; ?></p>
 
             <section id="detailBox">
                 <section>
                     <p>Eligibility</p>
-                    <ul><li>item1</li></ul>
+                    <ul>
+                        <?php
+                        $eligibility = explode("\n", $scholar['eligibility']); // assuming stored as newline-separated
+                        foreach($eligibility as $item){
+                            if(trim($item) != "") echo "<li>$item</li>";
+                        }
+                        ?>
+                    </ul>
                 </section>
                 <section>
                     <p>Requirements</p>
-                    <ul><li>item1</li></ul>
+                    <ul>
+                        <?php
+                        $requirements = explode("\n", $scholar['requirements']); // assuming stored as newline-separated
+                        foreach($requirements as $item){
+                            if(trim($item) != "") echo "<li>$item</li>";
+                        }
+                        ?>
+                    </ul>
                 </section>
             </section>
-            
         </section>
 
         <footer>
@@ -68,9 +105,8 @@
                     <a href="user-profile.php">Profile</a>             
                 <section>
                     <h5>Contact us</h5>
-                    <p>Phone number: xxx-xxx-xxxx</p>
-                    <p>Email: xxxx@xxxxx.xxx</p>
-                    <p>(social media links)</p>
+                    <p>Phone no.: (63+) 1234-5678</p>
+                    <p>Email: itsupport@csp.edu.ph</p>
                 </section>
             </section>
 
