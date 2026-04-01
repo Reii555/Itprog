@@ -160,6 +160,7 @@ h5{
     color: #778873;
     align-items: center;
     padding: 20px 105px;
+    padding-bottom: 0;
 }
 
 .appsContainer{
@@ -207,7 +208,7 @@ h5{
 }
 
 .deadlineText{
-    color: #ab1d1d;
+    color: #a92d2d;
     font-weight: bold;
     font-style: italic;
 }

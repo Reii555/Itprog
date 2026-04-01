@@ -20,7 +20,12 @@ $StudID = mysqli_query($conn, $getStudID);
 $cell = mysqli_fetch_assoc($StudID);
 $student_id = $cell['student_id'];
 
-$getApp = "SELECT * FROM APPLICATIONS WHERE student_id='$student_id' ORDER BY submission_date DESC LIMIT 3";
+$getApp = "SELECT a.*, s.title, s.deadline 
+           FROM APPLICATIONS a
+           JOIN SCHOLARSHIPS s ON a.scholarship_id = s.scholarship_id
+           WHERE a.student_id='$student_id'
+           ORDER BY a.submission_date DESC
+           LIMIT 3";
 $AppSc = mysqli_query($conn, $getApp);
 
 ?>
@@ -91,7 +96,7 @@ $AppSc = mysqli_query($conn, $getApp);
                 ?>
 
                 <section class="appsBox">
-                    <h5><?php echo $row['scholarship_name']; ?></h5>
+                    <h5><?php echo $row['title']; ?></h5>
                     <p>Status: <?php echo $row['status']; ?></p>
                     <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
                     <p>Submitted on: <?php echo $row['submission_date']; ?></p>

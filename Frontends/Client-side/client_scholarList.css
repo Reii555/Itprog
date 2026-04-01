@@ -62,8 +62,9 @@ h3 {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 20px 105px;
+    padding: 20px 105px 13px;
     margin-top: 10px;
+    color: #a2b29e;
 }
 
 #jumpSection .buttons1{
@@ -73,7 +74,7 @@ h3 {
     margin: 0;
     margin-right: 10px;
     padding: 10px 20px;
-    background-color: #778873;
+    background-color: #a2b29e;
     color: white;
     text-decoration: none;
     border-radius: 10px;
@@ -185,7 +186,7 @@ h5{
 }
 
 .deadlineText{
-    color: #ab1d1d;
+    color: #a92d2d;
     font-weight: bold;
     font-style: italic;
 }
