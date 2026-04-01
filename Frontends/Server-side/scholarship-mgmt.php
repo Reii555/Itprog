@@ -21,13 +21,15 @@ if($admin_query && mysqli_num_rows($admin_query) > 0){
 if(isset($_POST['add'])){
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $eligibility = mysqli_real_escape_string($conn, $_POST['eligibility']);
+    $requirements = mysqli_real_escape_string($conn, $_POST['requirements']);
     $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
     $release_status = mysqli_real_escape_string($conn, $_POST['release_status']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
 
-    $stmt = mysqli_prepare($conn, "INSERT INTO scholarships (title, description, deadline, release_status, status, created_by, created_at)
-                                    VALUES (?, ?, ?, ?, ?, ?, NOW())");
-    mysqli_stmt_bind_param($stmt, "sssssi", $title, $description, $deadline, $release_status, $status, $admin_id);
+    $stmt = mysqli_prepare($conn, "INSERT INTO scholarships (title, description, eligibility, requirements, deadline, release_status, status, created_by, created_at)
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    mysqli_stmt_bind_param($stmt, "sssssssi", $title, $description, $eligibility, $requirements, $deadline, $release_status, $status, $admin_id);
 
     if(mysqli_stmt_execute($stmt)){
         $msg = "Scholarship added successfully.";
@@ -44,12 +46,14 @@ if(isset($_POST['edit'])){
     $id = (int)$_POST['id'];
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $eligibility = mysqli_real_escape_string($conn, $_POST['eligibility']);
+    $requirements = mysqli_real_escape_string($conn, $_POST['requirements']);
     $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
     $release_status = mysqli_real_escape_string($conn, $_POST['release_status']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
 
-    $stmt = mysqli_prepare($conn, "UPDATE scholarships SET title=?, description=?, deadline=?, release_status=?, status=? WHERE scholarship_id=?");
-    mysqli_stmt_bind_param($stmt, "sssssi", $title, $description, $deadline, $release_status, $status, $id);
+    $stmt = mysqli_prepare($conn, "UPDATE scholarships SET title=?, description=?, eligibility=?, requirements=?, deadline=?, release_status=?, status=? WHERE scholarship_id=?");
+    mysqli_stmt_bind_param($stmt, "sssssssi", $title, $description, $eligibility, $requirements, $deadline, $release_status, $status, $id);
 
     if(mysqli_stmt_execute($stmt)){
         $msg = "Scholarship updated successfully.";
@@ -210,6 +214,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                                     data-id="<?php echo $row['scholarship_id']; ?>"
                                     data-title="<?php echo $row['title']; ?>"
                                     data-description="<?php echo $row['description']; ?>"
+                                    data-eligibility="<?php echo htmlspecialchars($row['eligibility']); ?>"
+                                    data-requirements="<?php echo htmlspecialchars($row['requirements']); ?>"
                                     data-deadline="<?php echo date('Y-m-d\TH:i', strtotime($row['deadline'])); ?>"
                                     data-release="<?php echo $row['release_status']; ?>"
                                     data-status="<?php echo $row['status']; ?>">
@@ -284,6 +290,14 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                             <textarea name="description" placeholder="Add description" required></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Eligibility *</label>
+                            <textarea name="eligibility" placeholder="Who can apply" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Requirements *</label>
+                            <textarea name="requirements" placeholder="Required documents" required></textarea>
+                        </div>
+                        <div class="form-group">
                             <label>Deadline *</label>
                             <input type="datetime-local" name="deadline" required>
                         </div>
@@ -328,6 +342,14 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                         <div class="form-group">
                             <Label>Description *</label>
                             <textarea name="description" id="edit_description" placeholder="Description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Eligibility *</label>
+                            <textarea name="eligibility" id="edit_eligibility" placeholder="Who can apply" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Requirements *</label>
+                            <textarea name="requirements" id="edit_requirements" placeholder="Required documents" required></textarea>
                         </div>
                         <div class="form-group">
                             <label>Deadline *</label>
@@ -415,6 +437,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                         document.getElementById('edit_id').value = selectedRow.dataset.id;
                         document.getElementById('edit_title').value = selectedRow.dataset.title;
                         document.getElementById('edit_description').value = selectedRow.dataset.description;
+                        document.getElementById('edit_eligibility').value = selectedRow.dataset.eligibility;
+                        document.getElementById('edit_requirements').value = selectedRow.dataset.requirements;
                         document.getElementById('edit_deadline').value = selectedRow.dataset.deadline;
                         document.getElementById('edit_release').value = selectedRow.dataset.release;
                         document.getElementById('edit_status').value = selectedRow.dataset.status;
