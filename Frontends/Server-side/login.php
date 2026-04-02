@@ -2,7 +2,7 @@
 session_start();
 include("../../db_connect.php");
 
-$error = "";
+//$error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
