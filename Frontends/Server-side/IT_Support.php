@@ -1,5 +1,16 @@
 <?php
     session_start();
+
+    function redirectToLogin() {
+                header("Location: ../Login.php");
+                exit();
+            }
+
+            function redirectToDashboard() {
+                header("Location: ../Dashboard.php");
+                exit();
+            }
+
 ?>
 
 <!DOCTYPE html>
@@ -47,17 +58,6 @@
             <div class="modal-footer">
                 <button onclick="closeModal()">Submit another Ticket?</button>
             <?php 
-            
-            function redirectToLogin() {
-                header("Location: ../Login.php");
-                exit();
-            }
-
-            function redirectToDashboard() {
-                header("Location: ../Dashboard.php");
-                exit();
-            }
-
 
             if(isset($_SESSION['account_id']) && isset($_SESSION['logged_in'])) {
                 // User is logged in
