@@ -127,6 +127,114 @@ if(!empty($params)) {
 
     <h1>Application Management</h1>
 
+<!-- Modal for Documents -->
+<?php
+// Check if we need to show the modal
+$show_modal = false;
+$modal_application_id = null;
+$modal_documents = [];
+$modal_application_info = null;
+
+if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
+    $show_modal = true;
+    $modal_application_id = (int)$_GET['view_docs'];
+    
+    // Fetch application info
+    $info_query = "
+        SELECT a.application_id, a.status, a.submission_date,
+               s.first_name, s.last_name, s.student_id, s.department, s.year_level,
+               sch.title as scholarship_title
+        FROM APPLICATIONS a
+        LEFT JOIN STUDENTS s ON a.student_id = s.student_id
+        LEFT JOIN SCHOLARSHIPS sch ON a.scholarship_id = sch.scholarship_id
+        WHERE a.application_id = ?
+    ";
+    $stmt = mysqli_prepare($conn, $info_query);
+    mysqli_stmt_bind_param($stmt, "i", $modal_application_id);
+    mysqli_stmt_execute($stmt);
+    $info_result = mysqli_stmt_get_result($stmt);
+    $modal_application_info = mysqli_fetch_assoc($info_result);
+    
+    // Fetch documents
+    $doc_query = "SELECT document_id, file_name, file_type, docu_type FROM DOCUMENTS WHERE application_id = ?";
+    $doc_stmt = mysqli_prepare($conn, $doc_query);
+    mysqli_stmt_bind_param($doc_stmt, "i", $modal_application_id);
+    mysqli_stmt_execute($doc_stmt);
+    $doc_result = mysqli_stmt_get_result($doc_stmt);
+    
+    while($doc = mysqli_fetch_assoc($doc_result)) {
+        $modal_documents[] = $doc;
+    }
+}
+?>
+
+<?php if($show_modal && $modal_application_info): ?>
+<div id="documentModal" class="modal" style="display: flex;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Application Documents</h2>
+            <a href="?<?php echo http_build_query(array_diff_key($_GET, ['view_docs' => ''])); ?>" class="close">&times;</a>
+        </div>
+        
+        <div class="modal-body">
+            <!-- Application Info -->
+            <div class="modal-app-info">
+                <div class="info-row">
+                    <span class="info-label">Student:</span>
+                    <span class="info-value"><?php echo htmlspecialchars($modal_application_info['first_name'] . ' ' . $modal_application_info['last_name']); ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Scholarship:</span>
+                    <span class="info-value"><?php echo htmlspecialchars($modal_application_info['scholarship_title']); ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Department:</span>
+                    <span class="info-value"><?php echo htmlspecialchars($modal_application_info['department']); ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Year Level:</span>
+                    <span class="info-value"><?php echo $modal_application_info['year_level']; ?></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value">
+                        <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $modal_application_info['status'])); ?>">
+                            <?php echo $modal_application_info['status']; ?>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Documents List -->
+            <div class="modal-documents">
+                <h3>Submitted Documents</h3>
+                <?php if(count($modal_documents) > 0): ?>
+                    <?php foreach($modal_documents as $doc): ?>
+                        <div class="modal-doc-item">
+                            <div class="doc-info">
+                                <div class="doc-title"><?php echo htmlspecialchars($doc['docu_type']); ?></div>
+                                <div class="doc-meta"><?php echo htmlspecialchars($doc['file_name']); ?> (<?php echo $doc['file_type']; ?>)</div>
+                            </div>
+                            <a href="view_document_file.php?doc_id=<?php echo $doc['document_id']; ?>&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" 
+                               target="_blank" 
+                               class="view-doc-btn">
+                                View
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="no-docs">No documents uploaded yet.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <a href="?<?php echo http_build_query(array_diff_key($_GET, ['view_docs' => ''])); ?>" class="close-modal-btn">Close</a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
   <section class="card-stats">
   <section class="stats-inner">
     <section class="card">
@@ -218,6 +326,7 @@ if(!empty($params)) {
             <th>Submitted on </th>
             <th>Reviewed by </th>
             <th>Year Level </th>
+            <th> </th>
         </tr>
     
 <?php if($applications_query && mysqli_num_rows($applications_query) > 0): ?>
@@ -234,11 +343,16 @@ if(!empty($params)) {
                         <td><?php echo date('M d, Y', strtotime($app['submission_date'])); ?></td>
                         <td><?php echo $app['reviewer_name'] ? htmlspecialchars($app['reviewer_name']) : 'Not reviewed'; ?></td>
                         <td><?php echo $app['year_level']; ?></td>
+                        <td>
+                            <a href="?<?php echo http_build_query(array_merge($_GET, ['view_docs' => $app['application_id']])); ?>" class="view-docs-link">
+                                View Documents
+                            </a>
+                        </td>
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="7" style="text-align: center;">No applications found.</td>
+                    <td colspan="8" style="text-align: center;">No applications found.</td>
                 </tr>
             <?php endif; ?>
 

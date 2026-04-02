@@ -3,7 +3,8 @@
 // Displays a single application with full details
 // @alledelweiss
 
-include 'db_connect.php';
+session_start();
+include("../../db_connect.php");
 
 $application_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 

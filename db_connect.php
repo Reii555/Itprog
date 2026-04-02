@@ -9,12 +9,11 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $host = 'localhost';
-$port = 3306;
 $username = 'root';
 $password = '';
 $database = 'scholarship_db'; 
 
-$conn = mysqli_connect($host, $username, $password, $database, $port);
+$conn = mysqli_connect($host, $username, $password, $database);
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
