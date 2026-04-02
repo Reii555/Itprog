@@ -158,8 +158,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
             <div class="settings-dropdown">
                 <button class="settings-butt">Settings ▼</button>
                 <div class="dropdown-menu">
-                   <a href="#" class="dropdown-item-logout">Logout</a>
-                   <a href="#" class="dropdown-item">Call for IT Support</a>
+                   <a href="logout.php" class="dropdown-item-logout">Logout</a>
+                   <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
                 </div>
             </div>
         </section>

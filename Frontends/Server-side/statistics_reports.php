@@ -106,7 +106,7 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
             <div class="settings-dropdown">
                 <button class="settings-btn">Settings ▼</button>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
+                    <a href="logout.php" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
                     <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
                 </div>
             </div>
