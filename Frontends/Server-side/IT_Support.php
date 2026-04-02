@@ -58,10 +58,11 @@
                 exit();
             }
 
-            if(isset($_SESSION['account_id']) || isset($_SESSION['logged_in'])) {
+
+            if(isset($_SESSION['account_id']) && isset($_SESSION['logged_in'])) {
                 // User is logged in
                 echo '<button onclick="window.location.href=\'Server_Dashboard.php\'">Return to Dashboard</button>';
-            } else {
+            } else if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 // User is not logged in
                 echo '<button onclick="window.location.href=\'login.php\'">Return to Login</button>';
             }

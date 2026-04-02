@@ -1,5 +1,5 @@
 <?php
-//session_start();
+session_start();
 include("../../db_connect.php");
 
 //check login
@@ -55,7 +55,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
     <div class="settings-dropdown">
     <button class="settings-btn">Settings ▼</button>
     <div class="dropdown-menu">
-        <a href="login.php" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
+        <a href="logout.php" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
         <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
         </div>
     </div>
