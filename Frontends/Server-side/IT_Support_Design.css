@@ -171,7 +171,6 @@ section.issue-form {
 .modal-footer {
     padding: 15px 20px 20px 20px;
     display: flex;
-    justify-content: flex-end;
     border-top: 1px solid #eee;
     gap: 10px; 
 }
