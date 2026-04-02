@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $_SESSION['account_id'] = $user['account_id'];
             $_SESSION['role'] = $user['role'];
+            $_SESSION['logged_in'] = true;
 
             header("Location: Server_Dashboard.php");
             exit();
