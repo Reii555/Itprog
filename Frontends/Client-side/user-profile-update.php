@@ -3,10 +3,25 @@
 // Displays the student's profile update form
 // @alledelweiss
 
-include 'db_connect.php';
+session_start();
+include("../../db_connect.php");
 
-// get student data from database
-$student_id = $_SESSION['student_id'];
+if(!isset($_SESSION['account_id'])){
+    header("Location: login.php");
+    exit();
+}
+
+$account_id = $_SESSION['account_id'];
+
+$getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
+
+if ($getStudID && mysqli_num_rows($getStudID) > 0) {
+    $row = mysqli_fetch_assoc($getStudID);
+    $student_id = $row['student_id'];
+} else {
+    die("Student record not found.");
+}
+
 $query = "SELECT s.*, a.email, a.account_id 
           FROM STUDENTS s
           JOIN ACCOUNTS a ON s.account_id = a.account_id
