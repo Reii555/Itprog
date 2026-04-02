@@ -9,36 +9,50 @@ if(!isset($_SESSION['account_id'])){
 }
 
 //get admin ID
+//get admin ID - FIXED with better error handling
 $admin_id = null;
-$admin_query = mysqli_query($conn, "SELECT admin_id FROM administrators WHERE account_id = '" .
-                mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
-if($admin_query && mysqli_num_rows($admin_query) > 0){
-    $admin_data = mysqli_fetch_assoc($admin_query);
+$account_id = $_SESSION['account_id'];
+$admin_query = "SELECT admin_id FROM administrators WHERE account_id = ?";
+$stmt = mysqli_prepare($conn, $admin_query);
+mysqli_stmt_bind_param($stmt, "i", $account_id);
+mysqli_stmt_execute($stmt);
+$admin_result = mysqli_stmt_get_result($stmt);
+
+if($admin_result && mysqli_num_rows($admin_result) > 0){
+    $admin_data = mysqli_fetch_assoc($admin_result);
     $admin_id = $admin_data['admin_id'];
+} else {
+    die("Error: Admin record not found for account ID: " . $account_id);
 }
+mysqli_stmt_close($stmt);
 
 //add scholarship function
 if(isset($_POST['add'])){
-    $title = mysqli_real_escape_string($conn, $_POST['title']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-    $eligibility = mysqli_real_escape_string($conn, $_POST['eligibility']);
-    $requirements = mysqli_real_escape_string($conn, $_POST['requirements']);
-    $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
-    $release_status = mysqli_real_escape_string($conn, $_POST['release_status']);
-    $status = mysqli_real_escape_string($conn, $_POST['status']);
-
-    $stmt = mysqli_prepare($conn, "INSERT INTO scholarships (title, description, eligibility, requirements, deadline, release_status, status, created_by, created_at)
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    mysqli_stmt_bind_param($stmt, "sssssssi", $title, $description, $eligibility, $requirements, $deadline, $release_status, $status, $admin_id);
-
-    if(mysqli_stmt_execute($stmt)){
-        $msg = "Scholarship added successfully.";
-        $msg_type = "success";
-    } else {
-        $msg = "Error: " . mysqli_error($conn);
+    if($admin_id == null){
+        $msg = "Error: Admin is not logged in.";
         $msg_type = "error";
+    } else {
+        $title = mysqli_real_escape_string($conn, $_POST['title']);
+        $description = mysqli_real_escape_string($conn, $_POST['description']);
+        $eligibility = mysqli_real_escape_string($conn, $_POST['eligibility']);
+        $requirements = mysqli_real_escape_string($conn, $_POST['requirements']);
+        $deadline = mysqli_real_escape_string($conn, $_POST['deadline']);
+        $release_status = mysqli_real_escape_string($conn, $_POST['release_status']);
+        $status = mysqli_real_escape_string($conn, $_POST['status']);
+
+        $stmt = mysqli_prepare($conn, "INSERT INTO scholarships (title, description, eligibility, requirements, deadline, release_status, status, created_by, created_at)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+        mysqli_stmt_bind_param($stmt, "sssssssi", $title, $description, $eligibility, $requirements, $deadline, $release_status, $status, $admin_id);
+
+        if(mysqli_stmt_execute($stmt)){
+            $msg = "Scholarship added successfully.";
+            $msg_type = "success";
+        } else {
+            $msg = "Error: " . mysqli_error($conn);
+            $msg_type = "error";
+        }
+        mysqli_stmt_close($stmt);
     }
-    mysqli_stmt_close($stmt);
 }
 
 //edit scholarship function
@@ -457,30 +471,6 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
             function closeAction(modalId) {
                 document.getElementById(modalId).classList.remove('show');
             }
-
-            //change items per page
-            function changeLimit(limit){
-                let url = new URL(window.location.href);
-                url.searchParams.set('limit', limit);
-                url.searchParams.set('page', 1);
-                window.location.href = url; //new URL
-            }
-
-            //handle search on Enter key
-            document.addEventListener('DOMContentLoaded', function() {
-                const searchInput = document.querySelector('.searchbox input');
-                if(searchInput){
-                    searchInput.addEventListener('keypress', function(e) {
-                        if(e.key === 'Enter'){
-                            e.preventDefault();
-                            let url = new URL(window.location.href);
-                            url.searchParams.set('search', this.value);
-                            url.searchParams.set('page', 1);
-                            window.location.href = url;
-                        }
-                    });
-                }
-            });
 
             //close modal when clicking outside the action area
             window.onclick = function(e){
