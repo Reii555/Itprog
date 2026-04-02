@@ -9,7 +9,6 @@ if(!isset($_SESSION['account_id'])){
 }
 
 //get admin ID
-//get admin ID - FIXED with better error handling
 $admin_id = null;
 $account_id = $_SESSION['account_id'];
 $admin_query = "SELECT admin_id FROM administrators WHERE account_id = ?";
