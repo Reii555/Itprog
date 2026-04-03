@@ -5,7 +5,7 @@
 // @alledelweiss
 
 session_start();
-include 'db_connect.php';
+include("../../db_connect.php");
 
 if(!isset($_SESSION['account_id'])){
     header("Location: login.php");
