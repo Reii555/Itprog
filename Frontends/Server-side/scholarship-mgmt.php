@@ -9,7 +9,6 @@ if(!isset($_SESSION['account_id'])){
 }
 
 //get admin ID
-//get admin ID - FIXED with better error handling
 $admin_id = null;
 $account_id = $_SESSION['account_id'];
 $admin_query = "SELECT admin_id FROM administrators WHERE account_id = ?";
@@ -159,8 +158,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
             <div class="settings-dropdown">
                 <button class="settings-butt">Settings ▼</button>
                 <div class="dropdown-menu">
-                   <a href="#" class="dropdown-item-logout">Logout</a>
-                   <a href="#" class="dropdown-item">Call for IT Support</a>
+                   <a href="logout.php" class="dropdown-item-logout">Logout</a>
+                   <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
                 </div>
             </div>
         </section>
@@ -214,6 +213,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                             <th>Scholarship ID</th>
                             <th>Title</th>
                             <th>Description</th>
+                            <th>Eligibility</th>
+                            <th>Requirements</th>
                             <th>Deadline</th>
                             <th>Release Status</th>
                             <th>Status</th>
@@ -239,6 +240,18 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                                         <?php 
                                             echo htmlspecialchars(substr($row['description'], 0, 50));
                                             if(strlen($row['description']) > 50) { echo '...'; }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                            echo htmlspecialchars(substr($row['eligibility'], 0, 50));
+                                            if(strlen($row['eligibility']) > 50) { echo '...'; }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                            echo htmlspecialchars(substr($row['requirements'], 0, 50));
+                                            if(strlen($row['requirements']) > 50) { echo '...'; }
                                         ?>
                                     </td>
                                     <td><?php echo date('M d, Y', strtotime($row['deadline'])); ?></td>
@@ -277,11 +290,16 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
                         <button disabled>Next ›</button>
                     <?php endif; ?>
 
-                    <select onchange="changeLimit(this.value)">
-                        <option value="10" <?php echo $limit == 10 ? 'selected' : ''; ?>>10</option>
-                        <option value="25" <?php echo $limit == 25 ? 'selected' : ''; ?>>25</option>
-                        <option value="50" <?php echo $limit == 50 ? 'selected' : ''; ?>>50</option>
-                    </select>
+                    <form method="GET" class="limit-form">
+                        <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                        <input type="hidden" name="page" value="1">
+                        <select name="limit" onchange="this.form.submit()">
+                            <option value="5" <?php echo $limit == 5 ? 'selected' : ''; ?>>5 per page</option>
+                            <option value="10" <?php echo $limit == 10 ? 'selected' : ''; ?>>10 per page</option>
+                            <option value="25" <?php echo $limit == 25 ? 'selected' : ''; ?>>25 per page</option>
+                            <option value="50" <?php echo $limit == 50 ? 'selected' : ''; ?>>50 per page</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </section>

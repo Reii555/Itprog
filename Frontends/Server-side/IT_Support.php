@@ -1,3 +1,18 @@
+<?php
+    session_start();
+
+    function redirectToLogin() {
+                header("Location: ../Login.php");
+                exit();
+            }
+
+            function redirectToDashboard() {
+                header("Location: ../Dashboard.php");
+                exit();
+            }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,8 +57,17 @@
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal()">Submit another Ticket?</button>
-                <button onclick="window.location.href='Server_Dashboard.php'">Go to Dashboard</button>
+            <?php 
 
+            if(isset($_SESSION['account_id']) && isset($_SESSION['logged_in'])) {
+                // User is logged in
+                echo '<button onclick="window.location.href=\'Server_Dashboard.php\'">Return to Dashboard</button>';
+            } else if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+                // User is not logged in
+                echo '<button onclick="window.location.href=\'login.php\'">Return to Login</button>';
+            }
+
+            ?>
             </div>
             
         </div>

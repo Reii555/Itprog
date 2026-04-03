@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `scholarship_db`
 --
-  CREATE DATABASE IF NOT EXISTS `scholarship_db(POPULATED)` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-  USE `scholarship_db(POPULATED)`;
+  CREATE DATABASE IF NOT EXISTS `CSP_database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+  USE `CSP_database`;
 
 -- --------------------------------------------------------
 

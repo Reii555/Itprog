@@ -1,21 +1,21 @@
 <?php
-//session_start();
+session_start();
 include("../../db_connect.php");
 
 //check login
-/*if(!isset($_SESSION['account_id'])){
+if(!isset($_SESSION['account_id'])){
     header("Location: ../../frontend/Server-side/login.php");
     exit();
-}*/
+}
 
 //get admin ID
-/*$admin_id = null;
+$admin_id = null;
 $admin_query = mysqli_query($conn, "SELECT admin_id FROM administrators WHERE account_id = '" .
                 mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
 if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_data = mysqli_fetch_assoc($admin_query);
     $admin_id = $admin_data['admin_id'];
-}*/
+}
 
 // Get statistics from database
 // Total Scholarships
@@ -55,7 +55,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
     <div class="settings-dropdown">
     <button class="settings-btn">Settings ▼</button>
     <div class="dropdown-menu">
-        <a href="#" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
+        <a href="logout.php" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
         <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
         </div>
     </div>

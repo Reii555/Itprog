@@ -431,7 +431,7 @@ tbody tr.selected{
 }
 
 .function.show{
-    display: flex;
+    display: flex !important;
 }
 
 .function-content {
@@ -447,7 +447,7 @@ tbody tr.selected{
 
 @keyframes modalSlideIn {
     from {
-        opactiy: 0;
+        opacity: 0;
         transform: translateY(-30px);
     }
     to {
@@ -473,6 +473,15 @@ tbody tr.selected{
     font-weight: 500;
 }
 
+.function-header .close {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 20px;
+}
+
 .function-header .close:hover{
     color: #ffc107;
 }
@@ -480,6 +489,18 @@ tbody tr.selected{
 .function-body{
     padding: 24px;
     background: white;
+}
+
+.function-body p {
+    color: #333;
+    font-size: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.function-body strong {
+    color: #6b7a68;
+    font-weight: bold;
 }
 
 .function-footer {
@@ -562,10 +583,14 @@ tbody tr.selected{
     background: #c82333;
 }
 
-.warning-text{
-    color: #dc3545;
-    font-size: 12px;
-    margin-top: 12px;
+.warning-text {
+    color: #dc3545 !important;
+    font-size: 13px !important;
+    margin-top: 15px !important;
+    text-align: center !important;
+    background: #fff3f3;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .empty-row td{
