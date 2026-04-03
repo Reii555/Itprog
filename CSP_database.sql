@@ -21,6 +21,9 @@ SET time_zone = "+00:00";
 -- Database: `CSP_database`
 --
 
+CREATE DATABASE IF NOT EXISTS `CSP_database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `CSP_database`;
+
 -- --------------------------------------------------------
 
 --
