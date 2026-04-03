@@ -11,14 +11,53 @@ if(!isset($_SESSION['account_id'])){
     exit();
 }
 
-$getOngoingSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Ongoing' ORDER BY deadline ASC";
-$ongoingSc = mysqli_query($conn, $getOngoingSc);
+$search = $_GET['search'] ?? '';
+$sort = $_GET['sort'] ?? '';
 
+$search_safe = mysqli_real_escape_string($conn, $search);
+
+// ONGOING SCHOLARSHIP
+$getOngoingSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Ongoing'";
+
+if (!empty($search)) {
+    $search_safe = mysqli_real_escape_string($conn, $search);
+    $getOngoingSc .= " AND (title LIKE '%$search_safe%' OR description LIKE '%$search_safe%')";
+}
+
+if ($sort == 'deadline_desc') {
+    $getOngoingSc .= " ORDER BY deadline DESC";
+} elseif ($sort == 'title_asc') {
+    $getOngoingSc .= " ORDER BY title ASC";
+} else {
+    $getOngoingSc .= " ORDER BY deadline ASC";
+}
+
+// UPCOMING SCHOLARSHIP
 $getUpSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Upcoming'";
-$upSc = mysqli_query($conn, $getUpSc);
 
-$getPastSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Completed' ORDER BY deadline ASC";
+if (!empty($search)) {
+    $getUpSc .= " AND (title LIKE '%$search_safe%' OR description LIKE '%$search_safe%')";
+}
+
+if ($sort == 'deadline_desc') {
+    $getUpSc .= " ORDER BY deadline DESC";
+} elseif ($sort == 'title_asc') {
+    $getUpSc .= " ORDER BY title ASC";
+}
+
+// PAST SCHOLARSHIP
+$getPastSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Completed'";
+
+if (!empty($search)) {
+    $getPastSc .= " AND (title LIKE '%$search_safe%' OR description LIKE '%$search_safe%')";
+}
+
+$getPastSc .= " ORDER BY deadline ASC";
+
+$ongoingSc = mysqli_query($conn, $getOngoingSc);
+$upSc = mysqli_query($conn, $getUpSc);
 $pastSc = mysqli_query($conn, $getPastSc);
+
 ?>
 
 <html>
@@ -44,6 +83,20 @@ $pastSc = mysqli_query($conn, $getPastSc);
         <section id="heading">
             <h3>Scholarship Listings</h3>
         </section>
+
+        <form method="GET" class="controls">
+            <input type="text" name="search" placeholder="Search scholarships..." 
+                value="<?php echo $_GET['search'] ?? ''; ?>">
+
+            <select name="sort">
+                <option value="">Sort By</option>
+                <option value="deadline_asc">Deadline ↑</option>
+                <option value="deadline_desc">Deadline ↓</option>
+                <option value="title_asc">Title A-Z</option>
+            </select>
+
+            <button type="submit">Apply</button>
+        </form>
 
         <section id="jumpSection">
             <p>jump to:</p>
