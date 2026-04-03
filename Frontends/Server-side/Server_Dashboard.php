@@ -109,7 +109,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
         <a href="scholarship-mgmt.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
-                    <img src="../icons/temp_image.png" alt="Manage Scholarships" class="card-icon">
+                    <img src="../icons/MANAGE SCHOLARSHIPS.png" alt="Manage Scholarships" class="card-icon">
                 </div>
                 <h3>Manage Scholarships</h3>
             </div>
@@ -118,7 +118,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
         <a href="AppMgmt.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
-                    <img src="../icons/temp_image.png" alt="Review Applications" class="card-icon">
+                    <img src="../icons/REVIEW APPLICATIONS.png" alt="Review Applications" class="card-icon">
                 </div>
                 <h3>Review Applications</h3>
             </div>
@@ -129,7 +129,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
         <a href="statistics_reports.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
-                    <img src="../icons/temp_image.png" alt="Statistics & Reports" class="card-icon">
+                    <img src="../icons/STATS AND REPORTS.png" alt="Statistics & Reports" class="card-icon">
                 </div>
                 <h3>Statistics & Reports</h3>
             </div>
