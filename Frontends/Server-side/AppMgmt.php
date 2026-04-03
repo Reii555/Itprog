@@ -8,8 +8,10 @@ if(!isset($_SESSION['account_id'])){
     exit();
 }
 
-//get admin ID
+//get admin ID and role FIRST
 $admin_id = null;
+$user_role = null;
+
 $admin_query = mysqli_query($conn, "SELECT admin_id FROM administrators WHERE account_id = '" .
                 mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
 if($admin_query && mysqli_num_rows($admin_query) > 0){
@@ -17,30 +19,66 @@ if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_id = $admin_data['admin_id'];
 }
 
-// Get statistics for the cards
-// Total Applications
-$total_apps_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM APPLICATIONS");
-if ($total_apps_query) {
-    $total_applications = mysqli_fetch_assoc($total_apps_query)['total'];
-} else {
-    $total_applications = 0;
+// Get user role
+$role_query = mysqli_query($conn, "SELECT role FROM ACCOUNTS WHERE account_id = '" . mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
+if($role_query) {
+    $user_role = mysqli_fetch_assoc($role_query)['role'];
 }
+
+// ============================================
+// AUTO-ASSIGN ADMIN WHEN VIEWING DOCUMENTS
+// ============================================
+if(isset($_GET['assign']) && isset($_GET['view_docs']) && $_GET['assign'] == '1') {
+    $app_id = (int)$_GET['view_docs'];
+    
+    // Only assign if no reviewer is assigned yet
+    $check_query = mysqli_query($conn, "SELECT reviewed_by FROM APPLICATIONS WHERE application_id = $app_id");
+    if($check_query) {
+        $check = mysqli_fetch_assoc($check_query);
+        if(is_null($check['reviewed_by']) || $check['reviewed_by'] == '') {
+            $assign_update = "UPDATE APPLICATIONS SET reviewed_by = $admin_id WHERE application_id = $app_id";
+            mysqli_query($conn, $assign_update);
+        }
+    }
+}
+
+// ============================================
+// HANDLE SINGLE STATUS UPDATE
+// ============================================
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['app_id']) && isset($_POST['new_status'])) {
+    $app_id = (int)$_POST['app_id'];
+    $new_status = mysqli_real_escape_string($conn, $_POST['new_status']);
+    
+    // Update the status with reviewer info
+    $update = "UPDATE APPLICATIONS SET status = '$new_status', reviewed_by = $admin_id, review_date = NOW() WHERE application_id = $app_id";
+    mysqli_query($conn, $update);
+    
+    // Refresh page
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+// ============================================
+// GET STATISTICS 
+// ============================================
+
+// Build access filter for stats based on user role
+$access_filter = "";
+if($user_role != 'IT') {
+    $access_filter = "WHERE (reviewed_by IS NULL OR reviewed_by = $admin_id)";
+}
+
+// Total Applications
+$total_apps_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM APPLICATIONS $access_filter");
+$total_applications = ($total_apps_query) ? mysqli_fetch_assoc($total_apps_query)['total'] : 0;
 
 // Pending Reviews
-$pending_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM APPLICATIONS WHERE status = 'Pending' OR status = 'Under Review'");
-if ($pending_query) {
-    $pending_reviews = mysqli_fetch_assoc($pending_query)['total'];
-} else {
-    $pending_reviews = 0;
-}
+$pending_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM APPLICATIONS $access_filter " . ($access_filter ? "AND" : "WHERE") . " (status = 'Pending' OR status = 'Under Review')");
+$pending_reviews = ($pending_query) ? mysqli_fetch_assoc($pending_query)['total'] : 0;
 
 // Approved Applications
-$approved_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM APPLICATIONS WHERE status = 'Approved'");
-if ($approved_query) {
-    $approved_applications = mysqli_fetch_assoc($approved_query)['total'];
-} else {
-    $approved_applications = 0;
-}
+$approved_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM APPLICATIONS $access_filter " . ($access_filter ? "AND" : "WHERE") . " status = 'Approved'");
+$approved_applications = ($approved_query) ? mysqli_fetch_assoc($approved_query)['total'] : 0;
 
 // Get scholarships for the filter dropdown
 $scholarships_query = mysqli_query($conn, "SELECT scholarship_id, title FROM SCHOLARSHIPS WHERE release_status = 'Published'");
@@ -57,15 +95,22 @@ $sort_order = isset($_GET['sort']) ? $_GET['sort'] : 'desc';
 
 // Handle clear filters
 if(isset($_GET['clear']) && $_GET['clear'] == '1') {
-    // Redirect to remove all GET parameters
     header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
     exit();
 }
 
-// Build WHERE clause for applications query
+// ============================================
+// BUILD QUERY 
+// ============================================
+
 $where_conditions = [];
 $params = [];
 $types = "";
+
+// Restrict to assigned applications (IT sees all, others see only assigned or unassigned)
+if($user_role != 'IT') {
+    $where_conditions[] = "(a.reviewed_by IS NULL OR a.reviewed_by = $admin_id)";
+}
 
 if($status_filter) {
     $where_conditions[] = "a.status = ?";
@@ -330,27 +375,32 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
         </tr>
     
 <?php if($applications_query && mysqli_num_rows($applications_query) > 0): ?>
-                <?php while($app = mysqli_fetch_assoc($applications_query)): ?>
-                    <tr>
-                        <td><?php echo $app['application_id']; ?></td>
-                        <td><?php echo htmlspecialchars($app['first_name'] . ' ' . $app['last_name']); ?></td>
-                        <td><?php echo htmlspecialchars($app['scholarship_title']); ?></td>
-                        <td>
-                            <span class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $app['status'])); ?>">
-                                <?php echo $app['status']; ?>
-                            </span>
-                        </td>
-                        <td><?php echo date('M d, Y', strtotime($app['submission_date'])); ?></td>
-                        <td><?php echo $app['reviewer_name'] ? htmlspecialchars($app['reviewer_name']) : 'Not reviewed'; ?></td>
-                        <td><?php echo $app['year_level']; ?></td>
-                        <td>
-                            <a href="?<?php echo http_build_query(array_merge($_GET, ['view_docs' => $app['application_id']])); ?>" class="view-docs-link">
-                                View Documents
-                            </a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
+    <?php while($app = mysqli_fetch_assoc($applications_query)): ?>
+        <tr>
+            <td><?php echo $app['application_id']; ?></td>
+            <td><?php echo htmlspecialchars($app['first_name'] . ' ' . $app['last_name']); ?></td>
+            <td><?php echo htmlspecialchars($app['scholarship_title']); ?></td>
+            <td>
+                <form method="POST" action="" style="display: inline;" onchange="this.submit()">
+                    <input type="hidden" name="app_id" value="<?php echo $app['application_id']; ?>">
+                    <select name="new_status" style="padding: 5px 8px; border-radius: 4px; font-size: 12px; border: 1px solid #ccc;">
+                        <option value="Pending" <?php echo $app['status'] == 'Pending' ? 'selected' : ''; ?>>Pending</option>
+                        <option value="Under Review" <?php echo $app['status'] == 'Under Review' ? 'selected' : ''; ?>>Under Review</option>
+                        <option value="Approved" <?php echo $app['status'] == 'Approved' ? 'selected' : ''; ?>>Approved</option>
+                        <option value="Rejected" <?php echo $app['status'] == 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
+                        <option value="Waitlisted" <?php echo $app['status'] == 'Waitlisted' ? 'selected' : ''; ?>>Waitlisted</option>
+                    </select>
+                </form>
+            </td>
+            <td><?php echo date('M d, Y', strtotime($app['submission_date'])); ?></td>
+            <td><?php echo $app['reviewer_name'] ? htmlspecialchars($app['reviewer_name']) : 'Not reviewed'; ?></td>
+            <td><?php echo $app['year_level']; ?></td>
+            <td>
+                <a href="?<?php echo http_build_query(array_merge($_GET, ['view_docs' => $app['application_id'], 'assign' => '1'])); ?>" class="view-docs-link">View Documents</a>
+            </td>
+        </tr>
+    <?php endwhile; ?>
+<?php else: ?>
                 <tr>
                     <td colspan="8" style="text-align: center;">No applications found.</td>
                 </tr>
