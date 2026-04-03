@@ -75,15 +75,22 @@ if (!$result) {
                         </div>
                         <div class="application-actions">
                             <a href="your-applications-read.php?id=<?php echo $application['application_id']; ?>" class="btn">View Application</a>
-                            <a href="application-form.php?id=<?php echo $application['scholarship_id']; ?>" class="btn btn-secondary">Edit Application</a>
-                            <a href="your-applications-delete.php?id=<?php echo $application['application_id']; ?>" class="btn btn-danger">Delete Application</a>
+                            
+                            <?php if ($application['status'] == 'Draft'): ?>
+                                <!-- edit and delete buttons if status is draft -->
+                                <a href="application-form.php?id=<?php echo $application['scholarship_id']; ?>" class="btn btn-secondary">Edit Application</a>
+                                <a href="your-applications-delete.php?id=<?php echo $application['application_id']; ?>" class="btn btn-danger">Delete Application</a>
+                            <?php else: ?>
+                                <span class="btn btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed;" title="Cannot edit - application already <?php echo strtolower($application['status']); ?>">Edit Application</span>
+                                <span class="btn btn-danger disabled" style="opacity: 0.5; cursor: not-allowed;" title="Cannot delete - application already <?php echo strtolower($application['status']); ?>">Delete Application</span>
+                            <?php endif; ?>
                         </div>
                     </section>
                 <?php endwhile; ?>
             <?php else: ?>
                 <section>
                     <p>You haven't submitted any applications yet.</p>
-                    <a href="scholarships.php" class="btn">Browse Scholarships</a>
+                    <a href="scholarList.php" class="btn">Browse Scholarships</a>
                 </section>
             <?php endif; ?>
         </div>
