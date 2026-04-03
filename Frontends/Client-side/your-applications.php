@@ -1,53 +1,45 @@
 <?php
-// user-profile.php
 // CLIENT-SIDE
-// Displays the student's profile and its details
+// Displays the student's application forms and their details
 // @alledelweiss
 
 session_start();
-include 'db_connect.php';
+include("../../db_connect.php");
 
-if (isset($_SESSION['account_id'])) {
+if(!isset($_SESSION['account_id'])){
     header("Location: login.php");
     exit();
 }
 
-// handles logout
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location: login.php");
-    exit();
-}
-
-// get student data from database
 $account_id = $_SESSION['account_id'];
 
-$getStudent = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id = '$account_id'");
+$getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
 
-if ($getStudent && mysqli_num_rows($getStudent) > 0) {
-    $student_row = mysqli_fetch_assoc($getStudent);
-    $student_id = $student_row['student_id'];
+if ($getStudID && mysqli_num_rows($getStudID) > 0) {
+    $row = mysqli_fetch_assoc($getStudID);
+    $student_id = $row['student_id'];
 } else {
     die("Student record not found.");
 }
 
-$query = "SELECT s.*, a.email 
-          FROM STUDENTS s
-          JOIN ACCOUNTS a ON s.account_id = a.account_id
-          WHERE s.student_id = $student_id";
+// get student's applications
+$query = "SELECT a.*, s.title as scholarship_name, s.deadline 
+          FROM APPLICATIONS a 
+          JOIN SCHOLARSHIPS s ON a.scholarship_id = s.scholarship_id 
+          WHERE a.student_id = $student_id 
+          ORDER BY a.submission_date DESC";
+
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
     die("Query failed: " . mysqli_error($conn));
 }
-
-$student = mysqli_fetch_assoc($result);
 ?>
 
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Centralized Scholarship Program - Profile</title>
+        <title>Centralized Scholarship Program - Your Applications</title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
@@ -59,47 +51,41 @@ $student = mysqli_fetch_assoc($result);
             <nav>
                 <a href="home.php">Home</a>
                 <a href="scholarList.php">Scholarships</a>
-                <a href="your-applications.php">Your Applications</a>
-                <a id="active" href="user-profile.php">Profile</a>
+                <a id="active" href="your-applications.php">Your Applications</a>
+                <a href="user-profile.php">Profile</a>
             </nav>
         </header>
 
         <div class="container">
-            <h2>Account Information</h2>
+            <h2>Your Applications</h2>
 
-            <section>
-                <div class="profile-grid">
-                    <div class="profile-item">
-                        <p>First Name</p>
-                        <p><?php echo isset($student['first_name']) ? htmlspecialchars($student['first_name']) : 'Not set'; ?></p>
-                    </div>
-                    <div class="profile-item">
-                        <p>Last Name</p>
-                        <p><?php echo isset($student['last_name']) ? htmlspecialchars($student['last_name']) : 'Not set'; ?></p>
-                    </div>
-                    <div class="profile-item">
-                        <p>Email</p>
-                        <p><?php echo isset($student['email']) ? htmlspecialchars($student['email']) : 'Not set'; ?></p>
-                    </div>
-                    <div class="profile-item">
-                        <p>Contact Number</p>
-                        <p><?php echo isset($student['contact_num']) ? '0' . htmlspecialchars($student['contact_num']) : 'Not set'; ?></p>
-                    </div>
-                    <div class="profile-item">
-                        <p>Department</p>
-                        <p><?php echo isset($student['department']) ? htmlspecialchars($student['department']) : 'Not set'; ?></p>
-                    </div>
-                    <div class="profile-item">
-                        <p>Year Level</p>
-                        <p><?php echo isset($student['year_level']) ? htmlspecialchars($student['year_level']) : 'Not set'; ?></p>
-                    </div>
-                </div>
-            </section>
-
-            <div class="action-links">
-                <a href="user-profile-update.php" class="btn">Edit</a>
-                <a href="home.php" class="btn btn-secondary">Go back</a>
-            </div>
+            <?php if (mysqli_num_rows($result) > 0): ?>
+                <?php while ($application = mysqli_fetch_assoc($result)): ?>
+                    <section class="application-card">
+                        <h3><?php echo htmlspecialchars($application['scholarship_name']); ?></h3>
+                        <div class="application-details">
+                            <p><strong>Status:</strong> 
+                                <span class="status-<?php echo strtolower(str_replace(' ', '', $application['status'] ?? 'pending')); ?>">
+                                    <?php echo htmlspecialchars($application['status'] ?? 'Pending'); ?>
+                                </span>
+                            </p>
+                            <p><strong>Deadline:</strong> <?php echo date('M d, Y', strtotime($application['deadline'])); ?></p>
+                            <p><strong>Submission Date:</strong> <?php echo $application['submission_date'] ? date('M d, Y', strtotime($application['submission_date'])) : 'Not submitted'; ?></p>
+                            <p><strong>Scholarship ID:</strong> <?php echo htmlspecialchars($application['scholarship_id']); ?></p>
+                        </div>
+                        <div class="application-actions">
+                            <a href="your-applications-read.php?id=<?php echo $application['application_id']; ?>" class="btn">View Application</a>
+                            <a href="application-form.php?id=<?php echo $application['scholarship_id']; ?>" class="btn btn-secondary">Edit Application</a>
+                            <a href="your-applications-delete.php?id=<?php echo $application['application_id']; ?>" class="btn btn-danger">Delete Application</a>
+                        </div>
+                    </section>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <section>
+                    <p>You haven't submitted any applications yet.</p>
+                    <a href="scholarships.php" class="btn">Browse Scholarships</a>
+                </section>
+            <?php endif; ?>
         </div>
 
         <footer>
