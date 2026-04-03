@@ -1,10 +1,26 @@
 <?php
+// your-applications-read.php
 // CLIENT-SIDE
 // Displays a single application with full details
 // @alledelweiss
 
 session_start();
 include("../../db_connect.php");
+
+if(!isset($_SESSION['account_id'])){
+    header("Location: login.php");
+    exit();
+}
+
+$account_id = $_SESSION['account_id'];
+
+$getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
+if ($getStudID && mysqli_num_rows($getStudID) > 0) {
+    $row = mysqli_fetch_assoc($getStudID);
+    $student_id = $row['student_id'];
+} else {
+    die("Student record not found.");
+}
 
 $application_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
@@ -15,12 +31,12 @@ $query = "SELECT a.*, s.title as scholarship_name, s.deadline, s.description,
           JOIN SCHOLARSHIPS s ON a.scholarship_id = s.scholarship_id
           JOIN STUDENTS st ON a.student_id = st.student_id
           JOIN ACCOUNTS acc ON st.account_id = acc.account_id
-          WHERE a.application_id = $application_id";
+          WHERE a.application_id = $application_id AND a.student_id = $student_id";
 
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
-    die("Query failed: " . mysqli_error($conn) . " - Query: " . $query);
+    die("Query failed: " . mysqli_error($conn));
 }
 
 $application = mysqli_fetch_assoc($result);
@@ -128,7 +144,13 @@ if (!$application) {
 
                 <div class="action-links">
                     <a href="your-applications.php" class="btn">Go Back</a>
-                    <a href="application-form.php?id=<?php echo $application['scholarship_id']; ?>" class="btn btn-secondary">Edit</a>
+                    
+                    <?php if ($application['status'] == 'Draft'): ?>
+                        <!-- only show edit button if status is draft -->
+                        <a href="application-form.php?id=<?php echo $application['scholarship_id']; ?>" class="btn btn-secondary">Edit</a>
+                    <?php else: ?>
+                        <span class="btn btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed;" title="Cannot edit - application already <?php echo strtolower($application['status']); ?>">Edit</span>
+                    <?php endif; ?>
                 </div>
             </section>
         </div>

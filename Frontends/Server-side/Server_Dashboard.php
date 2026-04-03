@@ -31,7 +31,7 @@ $total_applicants_query = mysqli_query($conn, "SELECT COUNT(DISTINCT student_id)
 $total_applicants = mysqli_fetch_assoc($total_applicants_query)['total'];
 
 // Pending Applications
-$pending_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM applications WHERE status = 'Pending'");
+$pending_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM applications WHERE status = 'Submitted'");
 $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
 ?>
 

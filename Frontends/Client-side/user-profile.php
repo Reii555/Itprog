@@ -1,4 +1,5 @@
 <?php
+// user-profile.php
 // CLIENT-SIDE
 // Displays the student's profile and its details
 // @alledelweiss
@@ -13,19 +14,10 @@ if(!isset($_SESSION['account_id'])){
 
 $account_id = $_SESSION['account_id'];
 
-$getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
-
-if ($getStudID && mysqli_num_rows($getStudID) > 0) {
-    $row = mysqli_fetch_assoc($getStudID);
-    $student_id = $row['student_id'];
-} else {
-    die("Student record not found.");
-}
-
 $query = "SELECT s.*, a.email 
           FROM STUDENTS s
           JOIN ACCOUNTS a ON s.account_id = a.account_id
-          WHERE s.student_id = $student_id";
+          WHERE s.account_id = $account_id";
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
@@ -33,6 +25,13 @@ if (!$result) {
 }
 
 $student = mysqli_fetch_assoc($result);
+
+// handles logout promise cross my heart
+if(isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 ?>
 
 <html>
@@ -90,6 +89,7 @@ $student = mysqli_fetch_assoc($result);
             <div class="action-links">
                 <a href="user-profile-update.php" class="btn">Edit</a>
                 <a href="home.php" class="btn btn-secondary">Go back</a>
+                <a href="?logout=1" class="btn btn-danger" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
             </div>
         </div>
 
