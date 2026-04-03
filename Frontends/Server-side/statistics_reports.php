@@ -103,15 +103,6 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
             <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
         </header>
 
-            <div class="settings-dropdown">
-                <button class="settings-btn">Settings ▼</button>
-                <div class="dropdown-menu">
-                    <a href="logout.php" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
-                    <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
-                </div>
-            </div>
-
-
         <hr>
 
         <div class="container">

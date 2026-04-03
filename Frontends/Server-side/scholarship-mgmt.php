@@ -153,17 +153,6 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
             <h2>Scholarship Management</h2>
         </section>
 
-        <!--settings for IT support and logout -->
-        <section class="settings">
-            <div class="settings-dropdown">
-                <button class="settings-butt">Settings ▼</button>
-                <div class="dropdown-menu">
-                   <a href="logout.php" class="dropdown-item-logout">Logout</a>
-                   <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
-                </div>
-            </div>
-        </section>
-
         <section class="summary">
             <h3 class="visually-hidden">Scholarship Statistics</h3>
             <div class="stat-card">
