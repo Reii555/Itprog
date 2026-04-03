@@ -59,9 +59,14 @@ $scholar = mysqli_fetch_assoc($result);
                     <p>Eligibility</p>
                     <ul>
                         <?php
-                        $eligibility = explode("\n", $scholar['eligibility']); // assuming stored as newline-separated
-                        foreach($eligibility as $item){
-                            if(trim($item) != "") echo "<li>$item</li>";
+                        $eligibility_str = str_replace('\r\n', "\n", $scholar['eligibility']);
+                        $eligibility = explode("\n", $eligibility_str);
+
+                        foreach ($eligibility as $item) {
+                            $item = trim($item);
+                            if ($item !== "") {
+                                echo "<li>" . htmlspecialchars($item) . "</li>";
+                            }
                         }
                         ?>
                     </ul>
@@ -70,7 +75,7 @@ $scholar = mysqli_fetch_assoc($result);
                     <p>Requirements</p>
                     <ul>
                         <?php
-                        $requirements = explode("\n", $scholar['requirements']); // assuming stored as newline-separated
+                        $requirements = explode("\n", $scholar['requirements']); 
                         foreach($requirements as $item){
                             if(trim($item) != "") echo "<li>$item</li>";
                         }
