@@ -12,27 +12,12 @@ if(!isset($_SESSION['account_id'])){
     exit();
 }
 
-// handles logout
-if(isset($_GET['logout'])) {
-    session_destroy();
-    header("Location: login.php");
-    exit();
-}
-
 $account_id = $_SESSION['account_id'];
-
-$getStudent = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id = '$account_id'");
-if ($getStudent && mysqli_num_rows($getStudent) > 0) {
-    $student_row = mysqli_fetch_assoc($getStudent);
-    $student_id = $student_row['student_id'];
-} else {
-    die("Student record not found.");
-}
 
 $query = "SELECT s.*, a.email 
           FROM STUDENTS s
           JOIN ACCOUNTS a ON s.account_id = a.account_id
-          WHERE s.student_id = $student_id";
+          WHERE s.account_id = $account_id";
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
@@ -40,6 +25,13 @@ if (!$result) {
 }
 
 $student = mysqli_fetch_assoc($result);
+
+// handles logout promise cross my heart
+if(isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
 ?>
 
 <html>
@@ -97,7 +89,7 @@ $student = mysqli_fetch_assoc($result);
             <div class="action-links">
                 <a href="user-profile-update.php" class="btn">Edit</a>
                 <a href="home.php" class="btn btn-secondary">Go back</a>
-                <a href="login.php" class="btn btn-danger" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
+                <a href="?logout=1" class="btn btn-danger" onclick="return confirm('Are you sure you want to logout?');">Logout</a>
             </div>
         </div>
 
