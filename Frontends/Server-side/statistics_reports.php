@@ -1,8 +1,7 @@
 <?php
-//session_start();
+session_start();
 require '../../db_connect.php';
 
-/*
 if(!isset($_SESSION['account_id'])){
     header("Location: ../../frontend/Server-side/login.php");
     exit();
@@ -16,7 +15,7 @@ if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_data = mysqli_fetch_assoc($admin_query);
     $admin_id = $admin_data['admin_id'];
     $admin_name = $admin_data['first_name'] . ' ' . $admin_data['last_name'];
-}*/
+}
 
 //get statistics
 //total scholarships
