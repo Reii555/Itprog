@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 03, 2026 at 10:56 AM
+-- Generation Time: Apr 04, 2026 at 08:53 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -21,9 +21,6 @@ SET time_zone = "+00:00";
 -- Database: `CSP_database`
 --
 
-CREATE DATABASE IF NOT EXISTS `CSP_database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `CSP_database`;
-
 -- --------------------------------------------------------
 
 --
@@ -34,7 +31,7 @@ CREATE TABLE `ACCOUNTS` (
   `account_id` int(11) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `role` enum('Student','Admin','IT') NOT NULL,
+  `role` enum('Student','Admin','IT','Super Admin') NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `account_created` datetime NOT NULL,
   `password_upd` datetime NOT NULL,
@@ -46,14 +43,14 @@ CREATE TABLE `ACCOUNTS` (
 --
 
 INSERT INTO `ACCOUNTS` (`account_id`, `email`, `password`, `role`, `is_active`, `account_created`, `password_upd`, `last_login`) VALUES
-(1, 'admin@csp.edu', 'admin123', 'Admin', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
+(1, 'super.admin@csp.edu', 'super123', 'Super Admin', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
 (2, 'it.admin@csp.edu', 'it123', 'IT', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
-(3, 'john.doe@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
-(4, 'jane.smith@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
-(5, 'bob.wilson@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
+(3, 'john.doe@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-03 22:28:09'),
+(4, 'jane.smith@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-04 13:51:19'),
+(5, 'bob.wilson@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-04 13:43:02'),
 (6, 'alice.brown@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
 (7, 'admin2@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-03 09:48:14'),
-(8, 'admin3@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-03 09:48:14'),
+(8, 'admin3@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-04 14:26:28'),
 (9, 'admin4@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-03 09:48:14');
 
 -- --------------------------------------------------------
@@ -76,7 +73,7 @@ CREATE TABLE `ADMINISTRATORS` (
 
 INSERT INTO `ADMINISTRATORS` (`admin_id`, `account_id`, `first_name`, `last_name`, `contact_num`) VALUES
 (1, 1, 'Super Admin', 'User', 912345678),
-(2, 2, 'IT', 'Administrator', 923456789),
+(2, 2, 'IT Support', 'User', 923456789),
 (3, 7, 'AdminTwo', 'Second', 934567891),
 (4, 8, 'AdminThree', 'Third', 945678912),
 (5, 9, 'AdminFour', 'Fourth', 956789123);
@@ -107,7 +104,7 @@ INSERT INTO `APPLICATIONS` (`application_id`, `student_id`, `scholarship_id`, `s
 (3, 2, 3, 'Approved', '2026-03-01 09:15:00', 5, '2026-04-01 16:08:09'),
 (4, 2, 4, 'Draft', NULL, NULL, NULL),
 (5, 3, 4, 'Rejected', '2026-04-01 16:20:00', 4, '2026-04-15 16:08:36'),
-(6, 4, 3, 'Waitlisted', '2026-03-10 14:45:00', 4, '2026-04-02 16:10:00');
+(6, 4, 3, 'Approved', '2026-03-10 14:45:00', 4, '2026-04-04 14:36:05');
 
 -- --------------------------------------------------------
 
@@ -195,7 +192,7 @@ CREATE TABLE `STUDENTS` (
 
 INSERT INTO `STUDENTS` (`student_id`, `account_id`, `first_name`, `last_name`, `department`, `year_level`, `contact_num`) VALUES
 (1, 3, 'John', 'Doe', 'Computer Science', 'Freshman', 912345678),
-(2, 4, 'Jane', 'Smith', 'Business Administration', 'Sophomore', 923456789),
+(2, 4, 'Jane', 'Smith', 'Business Administration', 'Sophomore', 923456788),
 (3, 5, 'Bob', 'Wilson', 'Engineering', 'Junior', 934567890),
 (4, 6, 'Alice', 'Brown', 'Education', 'Senior', 945678901);
 
@@ -278,7 +275,7 @@ ALTER TABLE `DOCUMENTS`
 -- AUTO_INCREMENT for table `SCHOLARSHIPS`
 --
 ALTER TABLE `SCHOLARSHIPS`
-  MODIFY `scholarship_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `scholarship_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `STUDENTS`
