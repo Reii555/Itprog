@@ -4,34 +4,48 @@ include("../../db_connect.php");
 
 //$error = "";
 
-if (isset($_POST['login'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
 
-    $query = "SELECT * FROM accounts WHERE email='$email' AND (role='admin' OR role='IT')";
-    $result = mysqli_query($conn, $query);
-
     //input validation
-    if(mysqli_num_rows($result) == 1) {
-        $row = mysqli_fetch_assoc($result);
-
-        //validate password
-        if($password == $row['password']) {
-            $update_query = "UPDATE accounts SET last_login=NOW() WHERE account_id= " . $row['account_id'];
-            mysqli_query($conn, $update_query);
-
-            $_SESSION['account_id'] = $row['account_id'];
-            $_SESSION['role'] = $row['role'];
-            $_SESSION['logged_in'] = true;
-            $_SESSION['email'] = $row['email'];
-
-            header("Location: Server_Dashboard.php");
-            exit();
-        } else {
-            $error = "Incorrect password.";
-        }
+    if (empty($email) || empty($password)) {
+        $error = "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
     } else {
-        $error = "Account not found.";
+        //proceed to login check 
+        $query = "SELECT * FROM accounts WHERE email= ?";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if (mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result);
+
+            if($password == $user['password']){
+                $update_query = "UPDATE accounts SET last_login = NOW() WHERE account_id =?";
+                $update_stmt = mysqli_prepare($conn, $update_query);
+                mysqli_stmt_bind_param($update_stmt, "i", $user["account_id"]);
+                mysqli_stmt_execute($update_stmt);
+                mysqli_stmt_close($update_stmt);
+                
+                $_SESSION['account_id'] = $user['account_id'];
+                $_SESSION['role'] = $user['role'];
+                $_SESSION['logged_in'] = true;
+                $_SESSION['email'] = $user['email'];
+
+                header("Location: Server_Dashboard.php");
+                exit();
+            } else {
+                $error = "Invalid email or password";
+            }
+
+        } else {
+            $error = "Invalid email or password";
+        }
+        mysqli_stmt_close($stmt);
     }
 }
 ?>
