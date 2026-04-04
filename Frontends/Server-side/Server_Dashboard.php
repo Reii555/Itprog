@@ -1,21 +1,21 @@
 <?php
-//session_start();
+session_start();
 include("../../db_connect.php");
 
 //check login
-/*if(!isset($_SESSION['account_id'])){
+if(!isset($_SESSION['account_id'])){
     header("Location: ../../frontend/Server-side/login.php");
     exit();
-}*/
+}
 
 //get admin ID
-/*$admin_id = null;
+$admin_id = null;
 $admin_query = mysqli_query($conn, "SELECT admin_id FROM administrators WHERE account_id = '" .
                 mysqli_real_escape_string($conn, $_SESSION['account_id']) . "'");
 if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_data = mysqli_fetch_assoc($admin_query);
     $admin_id = $admin_data['admin_id'];
-}*/
+}
 
 // Get statistics from database
 // Total Scholarships
@@ -31,7 +31,7 @@ $total_applicants_query = mysqli_query($conn, "SELECT COUNT(DISTINCT student_id)
 $total_applicants = mysqli_fetch_assoc($total_applicants_query)['total'];
 
 // Pending Applications
-$pending_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM applications WHERE status = 'Pending'");
+$pending_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM applications WHERE status = 'Submitted'");
 $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
 ?>
 
@@ -55,7 +55,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
     <div class="settings-dropdown">
     <button class="settings-btn">Settings ▼</button>
     <div class="dropdown-menu">
-        <a href="#" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
+        <a href="logout.php" class="dropdown-item-logout" onclick="return confirmLogout()">Logout</a>
         <a href="IT_Support.php" class="dropdown-item">Call for IT Support</a>
         </div>
     </div>
@@ -109,7 +109,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
         <a href="scholarship-mgmt.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
-                    <img src="../icons/temp_image.png" alt="Manage Scholarships" class="card-icon">
+                    <img src="../icons/MANAGE SCHOLARSHIPS.png" alt="Manage Scholarships" class="card-icon">
                 </div>
                 <h3>Manage Scholarships</h3>
             </div>
@@ -118,7 +118,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
         <a href="AppMgmt.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
-                    <img src="../icons/temp_image.png" alt="Review Applications" class="card-icon">
+                    <img src="../icons/REVIEW APPLICATIONS.png" alt="Review Applications" class="card-icon">
                 </div>
                 <h3>Review Applications</h3>
             </div>
@@ -129,7 +129,7 @@ $pending_applications = mysqli_fetch_assoc($pending_query)['total'];
         <a href="statistics_reports.php" class="action-card" style="text-decoration: none;">
             <div class="card-content">
                 <div class="icon-wrapper">
-                    <img src="../icons/temp_image.png" alt="Statistics & Reports" class="card-icon">
+                    <img src="../icons/STATS AND REPORTS.png" alt="Statistics & Reports" class="card-icon">
                 </div>
                 <h3>Statistics & Reports</h3>
             </div>

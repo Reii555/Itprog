@@ -27,6 +27,31 @@ if(mysqli_num_rows($result) == 0){
 }
 
 $scholar = mysqli_fetch_assoc($result);
+
+$account_id = $_SESSION['account_id'];
+$getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
+
+if ($getStudID && mysqli_num_rows($getStudID) > 0) {
+    $row = mysqli_fetch_assoc($getStudID);
+    $student_id = $row['student_id'];
+} else {
+    die("Student record not found.");
+}
+
+$appCheckQuery = "SELECT * FROM APPLICATIONS 
+                  WHERE scholarship_id = $scholarship_id 
+                  AND student_id = $student_id";
+
+$appResult = mysqli_query($conn, $appCheckQuery);
+
+$alreadyApplied = false;
+$applicationStatus = '';
+
+if (mysqli_num_rows($appResult) > 0) {
+    $alreadyApplied = true;
+    $application = mysqli_fetch_assoc($appResult);
+    $applicationStatus = $application['status'];
+}
 ?>
 
 <html>
@@ -59,9 +84,14 @@ $scholar = mysqli_fetch_assoc($result);
                     <p>Eligibility</p>
                     <ul>
                         <?php
-                        $eligibility = explode("\n", $scholar['eligibility']); // assuming stored as newline-separated
-                        foreach($eligibility as $item){
-                            if(trim($item) != "") echo "<li>$item</li>";
+                        $eligibility_str = str_replace('\r\n', "\n", $scholar['eligibility']);
+                        $eligibility = explode("\n", $eligibility_str);
+
+                        foreach ($eligibility as $item) {
+                            $item = trim($item);
+                            if ($item !== "") {
+                                echo "<li>" . htmlspecialchars($item) . "</li>";
+                            }
                         }
                         ?>
                     </ul>
@@ -70,7 +100,7 @@ $scholar = mysqli_fetch_assoc($result);
                     <p>Requirements</p>
                     <ul>
                         <?php
-                        $requirements = explode("\n", $scholar['requirements']); // assuming stored as newline-separated
+                        $requirements = explode("\n", $scholar['requirements']); 
                         foreach($requirements as $item){
                             if(trim($item) != "") echo "<li>$item</li>";
                         }
@@ -78,8 +108,11 @@ $scholar = mysqli_fetch_assoc($result);
                     </ul>
                 </section>
             </section>
-            
-            <a class="buttons" href="application-form.php?id=<?php echo $scholar['scholarship_id']; ?>">Apply Now</a>  
+            <?php if (!$alreadyApplied || $applicationStatus == 'Draft'): ?>
+                <a class="buttons" href="application-form.php?id=<?php echo $scholar['scholarship_id']; ?>">Apply Now</a>
+            <?php else: ?>
+                <a class="buttons" style="opacity: 0.5; cursor: not-allowed;" title="Cannot apply - already applied">Apply Now</a>
+            <?php endif; ?>
         </section>
 
         <footer>

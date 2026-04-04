@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 01, 2026 at 03:25 PM
+-- Generation Time: Apr 03, 2026 at 10:56 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -18,13 +18,15 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `scholarship_db`
+-- Database: `CSP_database`
 --
-  CREATE DATABASE IF NOT EXISTS `CSP_database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-  USE `CSP_database`;
+
+CREATE DATABASE IF NOT EXISTS `CSP_database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `CSP_database`;
 
 -- --------------------------------------------------------
 
+--
 -- Table structure for table `ACCOUNTS`
 --
 
@@ -49,7 +51,10 @@ INSERT INTO `ACCOUNTS` (`account_id`, `email`, `password`, `role`, `is_active`, 
 (3, 'john.doe@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
 (4, 'jane.smith@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
 (5, 'bob.wilson@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
-(6, 'alice.brown@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30');
+(6, 'alice.brown@email.com', 'password123', 'Student', 1, '2026-04-01 21:07:30', '2026-04-01 21:07:30', '2026-04-01 21:07:30'),
+(7, 'admin2@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-03 09:48:14'),
+(8, 'admin3@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-03 09:48:14'),
+(9, 'admin4@csp.edu', 'admin123', 'Admin', 1, '2026-04-03 09:48:14', '2026-04-03 09:48:14', '2026-04-03 09:48:14');
 
 -- --------------------------------------------------------
 
@@ -71,7 +76,10 @@ CREATE TABLE `ADMINISTRATORS` (
 
 INSERT INTO `ADMINISTRATORS` (`admin_id`, `account_id`, `first_name`, `last_name`, `contact_num`) VALUES
 (1, 1, 'Super Admin', 'User', 912345678),
-(2, 2, 'IT', 'Administrator', 923456789);
+(2, 2, 'IT', 'Administrator', 923456789),
+(3, 7, 'AdminTwo', 'Second', 934567891),
+(4, 8, 'AdminThree', 'Third', 945678912),
+(5, 9, 'AdminFour', 'Fourth', 956789123);
 
 -- --------------------------------------------------------
 
@@ -84,7 +92,7 @@ CREATE TABLE `APPLICATIONS` (
   `student_id` int(11) NOT NULL,
   `scholarship_id` int(11) NOT NULL,
   `status` enum('Draft','Submitted','Under Review','Approved','Rejected','Waitlisted') NOT NULL,
-  `submission_date` datetime NOT NULL,
+  `submission_date` datetime DEFAULT NULL,
   `reviewed_by` int(11) DEFAULT NULL,
   `review_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -94,12 +102,12 @@ CREATE TABLE `APPLICATIONS` (
 --
 
 INSERT INTO `APPLICATIONS` (`application_id`, `student_id`, `scholarship_id`, `status`, `submission_date`, `reviewed_by`, `review_date`) VALUES
-(1, 1, 3, 'Submitted', '2026-01-15 10:30:00', NULL, NULL),
-(2, 1, 4, 'Under Review', '2026-01-20 14:45:00', NULL, NULL),
-(3, 2, 3, 'Approved', '2026-01-25 09:15:00', NULL, NULL),
-(4, 2, 4, 'Draft', '2026-04-01 21:16:32', NULL, NULL),
-(5, 3, 4, 'Rejected', '2026-02-01 16:20:00', NULL, NULL),
-(6, 4, 3, 'Waitlisted', '2026-01-20 14:45:00', NULL, NULL);
+(1, 1, 3, 'Submitted', '2026-03-11 10:30:00', NULL, NULL),
+(2, 1, 4, 'Under Review', '2026-04-08 14:45:00', 3, '2026-04-13 15:57:41'),
+(3, 2, 3, 'Approved', '2026-03-01 09:15:00', 5, '2026-04-01 16:08:09'),
+(4, 2, 4, 'Draft', NULL, NULL, NULL),
+(5, 3, 4, 'Rejected', '2026-04-01 16:20:00', 4, '2026-04-15 16:08:36'),
+(6, 4, 3, 'Waitlisted', '2026-03-10 14:45:00', 4, '2026-04-02 16:10:00');
 
 -- --------------------------------------------------------
 
@@ -120,11 +128,13 @@ CREATE TABLE `DOCUMENTS` (
 --
 
 INSERT INTO `DOCUMENTS` (`document_id`, `application_id`, `file_name`, `file_type`, `docu_type`) VALUES
-(1, 1, 'enrollment.pdf', 'application/pdf', 'Certificate of Enrollment'),
-(2, 2, 'grades.pdf', 'application/pdf', 'Grades'),
-(3, 3, 'recommendation.pdf', 'application/pdf', 'Recommendation Letter'),
-(4, 5, 'id.jpg', 'image/jpeg', 'Valid ID'),
-(5, 6, 'picture.jpg', 'image/jpeg', '2x2 Picture');
+(1, 1, 'transcript_records.pdf', 'application/pdf', 'Transcript of Records'),
+(2, 2, 'recommendation.pdf', 'application/pdf', 'Recommendation Letter'),
+(3, 3, 'portfolio.pdf', 'application/pdf', 'Project Portfolio'),
+(4, 5, 'proposal.pdf', 'application/pdf', 'Project proposal'),
+(5, 5, 'certificate.jpg', 'image/jpeg', 'Certificates of volunteering'),
+(6, 1, 'portfolio.pdf', 'application/pdf', 'Project Portfolio'),
+(7, 1, 'statement.pdf', 'application/pdf', 'Personal Statement');
 
 -- --------------------------------------------------------
 
@@ -212,7 +222,8 @@ ALTER TABLE `ADMINISTRATORS`
 ALTER TABLE `APPLICATIONS`
   ADD PRIMARY KEY (`application_id`),
   ADD KEY `fk_applications_students` (`student_id`),
-  ADD KEY `fk_applications_scholarshio` (`scholarship_id`);
+  ADD KEY `fk_applications_scholarshio` (`scholarship_id`),
+  ADD KEY `fk_applications_admins` (`reviewed_by`) USING BTREE;
 
 --
 -- Indexes for table `DOCUMENTS`
@@ -243,13 +254,13 @@ ALTER TABLE `STUDENTS`
 -- AUTO_INCREMENT for table `ACCOUNTS`
 --
 ALTER TABLE `ACCOUNTS`
-  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `ADMINISTRATORS`
 --
 ALTER TABLE `ADMINISTRATORS`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `APPLICATIONS`
@@ -261,7 +272,7 @@ ALTER TABLE `APPLICATIONS`
 -- AUTO_INCREMENT for table `DOCUMENTS`
 --
 ALTER TABLE `DOCUMENTS`
-  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `document_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `SCHOLARSHIPS`
@@ -289,6 +300,7 @@ ALTER TABLE `ADMINISTRATORS`
 -- Constraints for table `APPLICATIONS`
 --
 ALTER TABLE `APPLICATIONS`
+  ADD CONSTRAINT `fk_applications_admins` FOREIGN KEY (`reviewed_by`) REFERENCES `ADMINISTRATORS` (`admin_id`),
   ADD CONSTRAINT `fk_applications_scholarshio` FOREIGN KEY (`scholarship_id`) REFERENCES `SCHOLARSHIPS` (`scholarship_id`),
   ADD CONSTRAINT `fk_applications_students` FOREIGN KEY (`student_id`) REFERENCES `STUDENTS` (`student_id`);
 

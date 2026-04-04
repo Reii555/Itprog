@@ -1,6 +1,7 @@
 <?php
+// your-applications-delete.php
 // CLIENT-SIDE
-// Displays applications that can be deleted with confirmation
+// Deletes application only if status is Draft
 // @alledelweiss
 
 session_start();
@@ -12,9 +13,9 @@ if(!isset($_SESSION['account_id'])){
 }
 
 $account_id = $_SESSION['account_id'];
+$application_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 $getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
-
 if ($getStudID && mysqli_num_rows($getStudID) > 0) {
     $row = mysqli_fetch_assoc($getStudID);
     $student_id = $row['student_id'];
@@ -22,44 +23,44 @@ if ($getStudID && mysqli_num_rows($getStudID) > 0) {
     die("Student record not found.");
 }
 
-if (isset($_POST['delete_application'])) {
-    $application_id = (int)$_POST['application_id'];
-    
-    // check first if the application belongs to the student
-    $check_query = "SELECT application_id FROM APPLICATIONS 
-                    WHERE application_id = $application_id 
-                    AND student_id = $student_id";
-    $check_result = mysqli_query($conn, $check_query);
-    
-    if (mysqli_num_rows($check_result) > 0) {
-        // delete first related documents
-        mysqli_query($conn, "DELETE FROM DOCUMENTS 
-                             WHERE application_id = $application_id");
-        
-        // then delete the application
-        $delete_query = "DELETE FROM APPLICATIONS 
-                         WHERE application_id = $application_id 
-                         AND student_id = $student_id";
-        if (mysqli_query($conn, $delete_query)) {
-            echo "<script>alert('Application deleted successfully!'); 
-            window.location.href='your-applications.php';</script>";
-        }
-    }
+// check if application exists, belongs to student, and has draft status
+$check_query = "SELECT a.*, s.title as scholarship_name 
+                FROM APPLICATIONS a 
+                JOIN SCHOLARSHIPS s ON a.scholarship_id = s.scholarship_id
+                WHERE a.application_id = $application_id AND a.student_id = $student_id";
+$check_result = mysqli_query($conn, $check_query);
+$application = mysqli_fetch_assoc($check_result);
+
+if (!$application) {
+    header("Location: your-applications.php");
+    exit();
 }
 
-// get the student's applications
-$query = "SELECT a.*, s.title as scholarship_name, s.deadline 
-          FROM APPLICATIONS a 
-          JOIN SCHOLARSHIPS s ON a.scholarship_id = s.scholarship_id 
-          WHERE a.student_id = $student_id 
-          ORDER BY a.submission_date DESC";
-$result = mysqli_query($conn, $query);
+// handles deletion
+if (isset($_POST['confirm_delete'])) {
+    // verify again that status is fraft
+    if ($application['status'] == 'Draft') {
+        // delete related documents first
+        mysqli_query($conn, "DELETE FROM DOCUMENTS WHERE application_id = $application_id");
+        
+        // then delete the application
+        $delete_query = "DELETE FROM APPLICATIONS WHERE application_id = $application_id AND student_id = $student_id";
+        if (mysqli_query($conn, $delete_query)) {
+            echo "<script>alert('Application deleted successfully!'); window.location.href='your-applications.php';</script>";
+            exit();
+        } else {
+            $error = "Failed to delete application.";
+        }
+    } else {
+        $error = "Cannot delete application. Status is not Draft.";
+    }
+}
 ?>
 
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Centralized Scholarship Program - Delete Applications</title>
+        <title>Centralized Scholarship Program - Delete Application</title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
@@ -71,42 +72,37 @@ $result = mysqli_query($conn, $query);
             <nav>
                 <a href="home.php">Home</a>
                 <a href="scholarList.php">Scholarships</a>
-                <a id="active" href="your-applications.php">Your Applications</a>
+                <a href="your-applications.php">Your Applications</a>
                 <a href="user-profile.php">Profile</a>
             </nav>
         </header>
 
         <div class="container">
-            <h2>Your Applications</h2>
-            <h3>Select application to remove</h3> 
+            <h2>Delete Application</h2>
 
-            <?php if (mysqli_num_rows($result) > 0): ?>
-                <?php while ($application = mysqli_fetch_assoc($result)): ?>
-                    <section class="application-card">
-                        <h3><?php echo htmlspecialchars($application['scholarship_name']); ?></h3>
-                        <div class="application-details">
-                            <p><strong>Status:</strong> <?php echo htmlspecialchars($application['status'] ?? 'Pending'); ?></p>
-                            <p><strong>Deadline:</strong> <?php echo date('M d, Y', strtotime($application['deadline'])); ?></p>
-                            <p><strong>Submission Date:</strong> <?php echo $application['submission_date'] ? date('M d, Y', strtotime($application['submission_date'])) : 'Not submitted'; ?></p>
-                            <p><strong>Scholarship ID:</strong> <?php echo htmlspecialchars($application['scholarship_id']); ?></p>
-                        </div>
-                        
-                        <!-- delete confirmation form -->
-                        <form method="POST" onsubmit="return confirm('Are you sure you want to delete this application? This action cannot be undone.');">
-                            <input type="hidden" name="application_id" value="<?php echo $application['application_id']; ?>">
-                            <button type="submit" name="delete_application" class="btn btn-danger">Delete this application</button>
-                        </form>
-                    </section>
-                <?php endwhile; ?>
+            <?php if ($application['status'] == 'Draft'): ?>
+                <section class="delete-confirmation">
+                    <h3>Are you sure you want to delete this application?</h3>
+                    <p><strong>Scholarship:</strong> <?php echo htmlspecialchars($application['scholarship_name']); ?></p>
+                    <p><strong>Status:</strong> <?php echo htmlspecialchars($application['status']); ?></p>
+                    <p><strong>Submission Date:</strong> <?php echo $application['submission_date'] ? date('M d, Y', strtotime($application['submission_date'])) : 'Not submitted'; ?></p>
+                    
+                    <p style="color: #bc2f2f; margin-top: 15px;">This action cannot be undone.</p>
+                    
+                    <form method="POST" style="margin-top: 20px;">
+                        <input type="hidden" name="application_id" value="<?php echo $application_id; ?>">
+                        <button type="submit" name="confirm_delete" class="btn btn-danger">Yes, Delete Application</button>
+                        <a href="your-applications.php" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </section>
             <?php else: ?>
                 <section>
-                    <p>No applications to delete.</p>
+                    <h3 style="color: #bc2f2f;">Cannot Delete Application</h3>
+                    <p>This application has a status of <strong><?php echo htmlspecialchars($application['status']); ?></strong>.</p>
+                    <p>Only applications with "Draft" status can be deleted.</p>
+                    <a href="your-applications.php" class="btn">Go Back</a>
                 </section>
             <?php endif; ?>
-
-            <div class="action-links">
-                <a href="your-applications.php" class="btn btn-secondary">Go Back</a>
-            </div>
         </div>
 
         <footer>

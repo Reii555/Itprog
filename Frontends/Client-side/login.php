@@ -21,6 +21,10 @@ if(isset($_POST['login'])) {
         if($password == $row['password']) {
             $_SESSION['account_id'] = $row['account_id'];
             $_SESSION['role'] = $row['role'];
+            $account_id = $_SESSION['account_id'];
+
+            $lastLogQuery = "UPDATE ACCOUNTS SET last_login = NOW() WHERE account_id = $account_id";
+            $lastLogresult = mysqli_query($conn, $lastLogQuery);
 
             header("Location: home.php");
             exit();
