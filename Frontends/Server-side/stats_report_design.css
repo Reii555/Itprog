@@ -13,6 +13,7 @@ body {
     padding: 18px 15px;
 }
 
+/* Header styles*/
 .header {
     background-color: #6b7a68;
     margin-bottom: 20px;
@@ -25,9 +26,9 @@ body {
     gap: 12px;
 }
 
-.header img {
-    width: 60px;
-    height: 60px;
+.CSP-logo {
+    width: auto;
+    height: 75px;
     object-fit: contain;
 }
 
@@ -43,6 +44,35 @@ body {
 
 .header a:hover {
     text-decoration: underline;
+}
+
+/* Role badge styling */
+.role-badge {
+    margin-left: auto;
+}
+
+.role-badge-super {
+    background: gold;
+    color: #333;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.role-badge-it {
+    background: #17a2b8;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.role-badge-admin {
+    background: #6c757d;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
 }
 
 /* Main Container */

@@ -205,9 +205,6 @@ if($is_super_admin) {
     <img src="../icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
             <strong>Centralized Scholarship Portal</strong>
             <span> / <a href="Server_Dashboard.php">Dashboard</a> / Application Management</span>
-            <?php if($is_super_admin): ?>
-                <span style="margin-left: auto; background: #gold; padding: 3px 10px; border-radius: 20px; font-size: 12px;">Super Admin</span>
-            <?php endif; ?>
     </section>
 
     <h1>Application Management</h1>

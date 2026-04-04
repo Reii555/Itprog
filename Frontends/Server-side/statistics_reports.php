@@ -96,13 +96,11 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
         <link rel="stylesheet" href="stats_report_design.css">
     </head>
     <body>
-        <header>
-            <img src="../../Frontends/icons/CSP_logo.png" alt="CSP_logo" width="60" height="60">
-            <strong>Centralized Scholarship Portal</strong>
-            <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
+        <header class="header">
+    <img src="../../Frontends/icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
+    <strong>Centralized Scholarship Portal</strong>
+    <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
         </header>
-
-        <hr>
 
         <div class="container">
             <h1>Statistics</h1>
