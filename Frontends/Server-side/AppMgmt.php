@@ -4,7 +4,7 @@ include("../../db_connect.php");
 
 //check login
 if(!isset($_SESSION['account_id'])){
-    header("Location: ../../frontend/Server-side/login.php");
+    header("Location: ./login.php");
     exit();
 }
 
