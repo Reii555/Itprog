@@ -3,7 +3,7 @@ session_start();
 require '../../db_connect.php';
 
 if(!isset($_SESSION['account_id'])){
-    header("Location: ../../frontend/Server-side/login.php");
+    header("Location: ./login.php");
     exit();
 }
 
