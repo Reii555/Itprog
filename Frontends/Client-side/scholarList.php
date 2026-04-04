@@ -1,7 +1,7 @@
 <?php  
 // CLIENT-SIDE SCHOLARSHIP LISTING PAGE
 // A centralized page to view all of the ongoing, upcoming, and past scholarships.
-// @isabel cubs
+// @isabel cubs 
 
 session_start();
 include("../../db_connect.php");
