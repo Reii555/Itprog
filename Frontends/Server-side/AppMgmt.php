@@ -25,6 +25,10 @@ if($role_query) {
     $user_role = mysqli_fetch_assoc($role_query)['role'];
 }
 
+// Check if user is Super Admin (has full access)
+$is_super_admin = ($user_role == 'Super Admin');
+$is_it_admin = ($user_role == 'IT');
+
 // ============================================
 // AUTO-ASSIGN ADMIN WHEN VIEWING DOCUMENTS
 // ============================================
@@ -59,12 +63,33 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['app_id']) && isset($_PO
 }
 
 // ============================================
+// REASSIGN APPLICATION TO DIFFERENT ADMIN (Super Admin only)
+// ============================================
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['reassign_app_id']) && isset($_POST['new_reviewer_id'])) {
+    // Only allow Super Admin to reassign
+    if($is_super_admin) {
+        $reassign_app_id = (int)$_POST['reassign_app_id'];
+        $new_reviewer_id = (int)$_POST['new_reviewer_id'];
+        
+        if($new_reviewer_id > 0) {
+            $reassign_update = "UPDATE APPLICATIONS SET reviewed_by = $new_reviewer_id WHERE application_id = $reassign_app_id";
+            mysqli_query($conn, $reassign_update);
+        }
+        
+        // Refresh page
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
+}
+
+// ============================================
 // GET STATISTICS 
 // ============================================
 
 // Build access filter for stats based on user role
+// Super Admin sees ALL, others see only assigned or unassigned
 $access_filter = "";
-if($user_role != 'IT') {
+if(!$is_super_admin) {
     $access_filter = "WHERE (reviewed_by IS NULL OR reviewed_by = $admin_id)";
 }
 
@@ -107,8 +132,8 @@ $where_conditions = [];
 $params = [];
 $types = "";
 
-// Restrict to assigned applications (IT sees all, others see only assigned or unassigned)
-if($user_role != 'IT') {
+// Restrict to assigned applications (Super Admin sees ALL)
+if(!$is_super_admin) {
     $where_conditions[] = "(a.reviewed_by IS NULL OR a.reviewed_by = $admin_id)";
 }
 
@@ -136,7 +161,8 @@ $sql = "
     SELECT a.application_id, a.student_id, a.status, a.submission_date, a.review_date,
            s.first_name, s.last_name, s.year_level, s.department,
            sch.title as scholarship_title,
-           CONCAT(ad.first_name, ' ', ad.last_name) as reviewer_name
+           CONCAT(ad.first_name, ' ', ad.last_name) as reviewer_name,
+           a.reviewed_by
     FROM APPLICATIONS a
     LEFT JOIN STUDENTS s ON a.student_id = s.student_id
     LEFT JOIN SCHOLARSHIPS sch ON a.scholarship_id = sch.scholarship_id
@@ -155,6 +181,17 @@ if(!empty($params)) {
     $applications_query = mysqli_query($conn, $sql);
 }
 
+// Get all admins for Super Admin dropdown
+$all_admins = [];
+if($is_super_admin) {
+    $admins_query = mysqli_query($conn, "SELECT ad.admin_id, ad.first_name, ad.last_name, a.role 
+                                         FROM ADMINISTRATORS ad 
+                                         JOIN ACCOUNTS a ON ad.account_id = a.account_id");
+    while($admin = mysqli_fetch_assoc($admins_query)) {
+        $all_admins[] = $admin;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -167,7 +204,10 @@ if(!empty($params)) {
     <section class="header">
     <img src="../icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
             <strong>Centralized Scholarship Portal</strong>
-            <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
+            <span> / <a href="Server_Dashboard.php">Dashboard</a> / Application Management</span>
+            <?php if($is_super_admin): ?>
+                <span style="margin-left: auto; background: #gold; padding: 3px 10px; border-radius: 20px; font-size: 12px;">Super Admin</span>
+            <?php endif; ?>
     </section>
 
     <h1>Application Management</h1>
@@ -222,7 +262,6 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
         </div>
         
         <div class="modal-body">
-            <!-- Application Info -->
             <div class="modal-app-info">
                 <div class="info-row">
                     <span class="info-label">Student:</span>
@@ -250,7 +289,6 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
                 </div>
             </div>
             
-            <!-- Documents List -->
             <div class="modal-documents">
                 <h3>Submitted Documents</h3>
                 <?php if(count($modal_documents) > 0): ?>
@@ -258,7 +296,7 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
                         <div class="modal-doc-item">
                             <div class="doc-info">
                                 <div class="doc-title"><?php echo htmlspecialchars($doc['docu_type']); ?></div>
-                                <div class="doc-meta"><?php echo htmlspecialchars($doc['file_name']); ?> (<?php echo $doc['file_type']; ?>)</div>
+                                <div class="doc-meta"><?php echo htmlspecialchars($doc['file_name']); ?></div>
                             </div>
                             <a href="view_document_file.php?doc_id=<?php echo $doc['document_id']; ?>&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" 
                                target="_blank" 
@@ -302,7 +340,6 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
 <br>
 
 <!-- Advanced Filtering -->
-
 <section class="Adv-Filtr">
   <form method="GET" action="">
   <section class="filter-dropdown">
@@ -360,18 +397,20 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
 </section>
 
 <!-- Applications Table -->
-
-    <section class="table-container">
-        <table>
+<section class="table-container">
+    <table>
         <tr>
-            <th>Application ID </th>
-            <th>Student ID </th>
-            <th>Scholarship </th>
-            <th>Current Status </th>
-            <th>Submitted on </th>
-            <th>Reviewed by </th>
-            <th>Year Level </th>
-            <th> </th>
+            <th>Application ID</th>
+            <th>Student Name</th>
+            <th>Scholarship</th>
+            <th>Current Status</th>
+            <th>Submitted on</th>
+            <th>Reviewed by</th>
+            <?php if($is_super_admin): ?>
+                <th>Re-assign To</th>
+            <?php endif; ?>
+            <th>Year Level</th>
+            <th>Actions</th>
         </tr>
     
 <?php if($applications_query && mysqli_num_rows($applications_query) > 0): ?>
@@ -393,7 +432,24 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
                 </form>
             </td>
             <td><?php echo date('M d, Y', strtotime($app['submission_date'])); ?></td>
-            <td><?php echo $app['reviewer_name'] ? htmlspecialchars($app['reviewer_name']) : 'Not reviewed'; ?></td>
+            <td><?php echo $app['reviewer_name'] ? htmlspecialchars($app['reviewer_name']) : 'Not assigned'; ?></td>
+            <?php if($is_super_admin): ?>
+                <td>
+                    <form method="POST" action="" style="display: inline;" onchange="this.submit()">
+                        <input type="hidden" name="reassign_app_id" value="<?php echo $app['application_id']; ?>">
+                        <select name="new_reviewer_id" style="padding: 4px 6px; border-radius: 4px; font-size: 11px;">
+                            <option value="">-- Assign --</option>
+                            <?php foreach($all_admins as $admin_option): ?>
+                                <option value="<?php echo $admin_option['admin_id']; ?>" 
+                                    <?php echo ($app['reviewed_by'] == $admin_option['admin_id']) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($admin_option['first_name'] . ' ' . $admin_option['last_name']); ?>
+                                    (<?php echo $admin_option['role']; ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </form>
+                </td>
+            <?php endif; ?>
             <td><?php echo $app['year_level']; ?></td>
             <td>
                 <a href="?<?php echo http_build_query(array_merge($_GET, ['view_docs' => $app['application_id'], 'assign' => '1'])); ?>" class="view-docs-link">View Documents</a>
@@ -401,22 +457,22 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
         </tr>
     <?php endwhile; ?>
 <?php else: ?>
-                <tr>
-                    <td colspan="8" style="text-align: center;">No applications found.</td>
-                </tr>
-            <?php endif; ?>
+        <tr>
+            <td colspan="<?php echo $is_super_admin ? '9' : '8'; ?>" style="text-align: center;">No applications found.</td>
+        </tr>
+<?php endif; ?>
 
-        </table>
-    </section>
+    </table>
 </section>
 
-    <br>
+<br>
 
-    <section class="go-back">
-        <button onclick="window.location.href='Server_Dashboard.php'">Go Back</button>
-    </section>
+<section class="go-back">
+    <button onclick="window.location.href='Server_Dashboard.php'">Go Back</button>
+</section>
 
-
-    
 </body>
 </html>
+
+<!-- DEBUG: Role = '<?php echo $user_role; ?>' -->
+<!-- Super Admin check = <?php echo $is_super_admin ? 'TRUE' : 'FALSE'; ?> -->
