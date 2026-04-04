@@ -101,10 +101,10 @@ $AppSc = mysqli_query($conn, $getApp);
                     <p class="deadlineText">Deadline: <?php echo $row['deadline']; ?></p>
                     <p>Submitted on: <?php echo $row['submission_date']; ?></p>
                     <section class="appButtons">
-                        <a class="buttons2" href="viewApplication.php?id=<?php echo $row['application_id']; ?>">View Application</a>
+                        <a class="buttons2" href="your-applications-read.php?id=<?php echo $row['application_id']; ?>">View Application</a>
                         <?php
                         if ($row['status'] == 'Draft'){
-                            echo "<a class='buttons2' href='editApplication.php?id={$row['application_id']}'>Edit Application</a>";
+                            echo "<a class='buttons2' href='application-form.php?id={$row['application_id']}'>Edit Application</a>";
                         }
                         ?>
                     </section>  

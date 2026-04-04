@@ -172,7 +172,7 @@ while ($row = mysqli_fetch_assoc($status_result)) {
                             <a href="your-applications-read.php?id=<?php echo $application['application_id']; ?>" class="btn">View Application</a>
                             
                             <?php if ($application['status'] == 'Draft'): ?>
-                                <a href="application-form.php?id=<?php echo $application['scholarship_id']; ?>" class="btn btn-secondary">Edit Application</a>
+                                <a href="application-form.php?id=<?php echo $application['application_id']; ?>" class="btn btn-secondary">Edit Application</a>
                                 <a href="your-applications-delete.php?id=<?php echo $application['application_id']; ?>" class="btn btn-danger">Delete Application</a>
                             <?php else: ?>
                                 <span class="btn btn-secondary disabled" style="opacity: 0.5; cursor: not-allowed;" title="Cannot edit - application already <?php echo strtolower($application['status']); ?>">Edit Application</span>

@@ -13,21 +13,40 @@ if(!isset($_SESSION['account_id'])){
 
 $account_id = $_SESSION['account_id'];
 
+// get student id
 $getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
 
 if ($getStudID && mysqli_num_rows($getStudID) > 0) {
     $row = mysqli_fetch_assoc($getStudID);
     $student_id = $row['student_id'];
+    $logged_in_student_id = $student_id;
 } else {
     die("Student record not found.");
 }
 
-$scholarship_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$application_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-// if no scholarship ID provided, redirect to scholarships page
-if ($scholarship_id == 0) {
+if ($application_id == 0) {
     header('Location: scholarships.php');
     exit();
+}
+
+// get application details
+$app_query = "SELECT * FROM APPLICATIONS WHERE application_id = $application_id";
+$app_result = mysqli_query($conn, $app_query);
+
+if (!$app_result || mysqli_num_rows($app_result) == 0) {
+    die("Application not found.");
+}
+
+$application = mysqli_fetch_assoc($app_result);
+
+$student_id = $application['student_id'];
+$scholarship_id = $application['scholarship_id'];
+
+// to make sure that users can't access other user's applications
+if ($student_id != $logged_in_student_id) {
+    die("Unauthorized access.");
 }
 
 // get student data
@@ -48,47 +67,64 @@ if (!$scholarship) {
     exit();
 }
 
-// check if student has already applied
-$check_query = "SELECT * FROM APPLICATIONS 
-                WHERE student_id = $student_id 
-                AND scholarship_id = $scholarship_id";
-$check_result = mysqli_query($conn, $check_query);
-$existing_application = mysqli_fetch_assoc($check_result);
+// if student already applied, get submitted documents
+$documents = [];
+$document_count = 0;
+
+$document_query = "SELECT * FROM DOCUMENTS WHERE application_id = $application_id";
+$document_result = mysqli_query($conn, $document_query);
+
+if ($document_result && mysqli_num_rows($document_result) > 0) {
+    $documents = mysqli_fetch_all($document_result, MYSQLI_ASSOC);
+    $document_count = count($documents);
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $current_date = date('Y-m-d H:i:s');
-    
-    if (isset($_POST['submit_application'])) {
-        if ($existing_application) {
-            // updates the existing application
-            $update_query = "UPDATE APPLICATIONS SET 
-                            status = 'Submitted',
-                            submission_date = '$current_date'
-                            WHERE application_id = {$existing_application['application_id']}";
-            mysqli_query($conn, $update_query);
+
+    // ADD DOCUMENTS
+    if (isset($_POST['save_document'])) {
+        $doc_type = mysqli_real_escape_string($conn, $_POST['document_type']);
+
+        if (empty($doc_type)) {
+            echo "<script>alert('Please select a document type.');</script>";
         } else {
-            // creates a new application
-            $insert_query = "INSERT INTO APPLICATIONS (student_id, scholarship_id, status, submission_date) 
-                            VALUES ($student_id, $scholarship_id, 'Submitted', '$current_date')";
-            mysqli_query($conn, $insert_query);
-            $application_id = mysqli_insert_id($conn);
-        }  
+            if($doc_type == 'Valid ID' || $doc_type == '2x2 Picture'){
+                $file_name = 'default.jpeg';
+                $file_type = 'image/jpeg';
+            } else {
+                $file_name = 'default.pdf';
+                $file_type = 'application/pdf';
+            }
+
+            mysqli_query($conn, "INSERT INTO DOCUMENTS (application_id, file_name, file_type, docu_type) VALUES ($application_id, '$file_name', '$file_type', '$doc_type')");
+                echo "<script>alert('Document added successfully!');
+                    window.location.href=window.location.href;</script>";
+        }
+    }
+    
+    // SUBMIT APPLICATION
+    if (isset($_POST['submit_application'])) {
+        // updates the existing application
+        $update_query = "UPDATE APPLICATIONS SET 
+                        status = 'Submitted',
+                        submission_date = '$current_date'
+                        WHERE application_id = $application_id";
+        mysqli_query($conn, $update_query);
+        
         echo "<script>alert('Application submitted successfully!'); 
             window.location.href='your-applications.php';</script>";
         exit();
-    } elseif (isset($_POST['save_draft'])) {
-        if ($existing_application) {
-            // updates the existing draft
-            $update_query = "UPDATE APPLICATIONS SET 
-                            status = 'Draft'
-                            WHERE application_id = {$existing_application['application_id']}";
-            mysqli_query($conn, $update_query);
-        } else {
-            // creates a new draft
-            $insert_query = "INSERT INTO APPLICATIONS (student_id, scholarship_id, status) 
-                            VALUES ($student_id, $scholarship_id, 'Draft')";
-            mysqli_query($conn, $insert_query);
-        }
+    }
+
+    // SAVE DRAFT
+    if (isset($_POST['save_draft'])) {
+        // updates the existing draft
+        $update_query = "UPDATE APPLICATIONS SET 
+                        status = 'Draft'
+                        WHERE application_id = $application_id";
+        mysqli_query($conn, $update_query);
+
         echo "<script>alert('Application saved as draft!'); 
             window.location.href='your-applications.php';</script>";
         exit();
@@ -128,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <form method="POST" action="" enctype="multipart/form-data">
                 <section>
-                    <p><strong>Application ID:</strong> <?php echo $existing_application['application_id'] ?? '--- (Will be generated upon submission)'; ?></p>
+                    <p><strong>Application ID:</strong> <?php echo $application_id; ?></p>
                     <p><strong>Student ID:</strong> <?php echo htmlspecialchars($student['student_id']); ?></p>
 
                     <h3>Personal Information</h3>
@@ -167,11 +203,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <h3>Required Documents</h3>
                     <ul class="requirements-list">
-                        <li>Certificate of Enrollment</li>
-                        <li>Grades from previous semester</li>
-                        <li>Letter of Recommendation</li>
-                        <li>Valid ID</li>
-                        <li>2x2 Picture</li>
+                        <?php 
+                        $requirements_str = str_replace("\r\n", "\n", $scholarship['requirements']);
+                        $requirements = explode("\n", $requirements_str);
+
+                        foreach ($requirements as $item) {
+                            $item = trim($item);
+                            if ($item !== '')
+                                echo "<li>" . htmlspecialchars($item) . "</li>";
+                        }
+                        ?>
                     </ul>
 
                     <div class="form-group">
@@ -190,10 +231,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="file" id="file_upload" name="file_upload" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
                         <label for="file_upload">+ Upload File</label>
                     </div>
+
+                    <button type="submit" name="save_document" class="btn" id="docu">Submit Document</button>
+
+                    <div class="form-group">
+                        <h3>Submitted Document/s</h3>
+                        <?php 
+                            if ($document_count > 0) {
+                                echo "<ul class='requirements-list'>";
+                                foreach ($documents as $doc) {
+                                    echo "<li>" . htmlspecialchars($doc['docu_type']) . "</li>";
+                                }
+                                echo "</ul>";
+                            } else {
+                                echo "<p>No documents submitted.</p>";
+                            }
+                        ?>
+                    </div>
                 </section>
 
                 <div class="action-links">
-                    <a href="scholarships.php" class="btn btn-secondary">Go Back</a>
                     <button type="submit" name="save_draft" class="btn">Save as Draft</button>
                     <button type="submit" name="submit_application" class="btn">Submit Application</button>
                 </div>

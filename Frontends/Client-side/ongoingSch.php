@@ -100,19 +100,29 @@ if (mysqli_num_rows($appResult) > 0) {
                     <p>Requirements</p>
                     <ul>
                         <?php
-                        $requirements = explode("\n", $scholar['requirements']); 
-                        foreach($requirements as $item){
-                            if(trim($item) != "") echo "<li>$item</li>";
+                        $requirements_str = str_replace('\r\n', "\n", $scholar['requirements']);
+                        $requirements = explode("\n", $requirements_str);
+
+                        foreach ($requirements as $item) {
+                            $item = trim($item);
+                            if ($item !== "") {
+                                echo "<li>" . htmlspecialchars($item) . "</li>";
+                            }
                         }
                         ?>
                     </ul>
                 </section>
             </section>
-            <?php if (!$alreadyApplied || $applicationStatus == 'Draft'): ?>
-                <a class="buttons" href="application-form.php?id=<?php echo $scholar['scholarship_id']; ?>">Apply Now</a>
-            <?php else: ?>
-                <a class="buttons" style="opacity: 0.5; cursor: not-allowed;" title="Cannot apply - already applied">Apply Now</a>
-            <?php endif; ?>
+            <?php 
+            if (!$alreadyApplied) {
+                echo "<a class='buttons' href='apply.php?scholarship_id=$scholarship_id'>Apply Now</a>";
+            } else if ($applicationStatus == 'Draft') {
+                echo "<a class='buttons' href='application-form.php?id={$application_id}'>Apply Now</a>";
+            } else {
+                echo "<span class='buttons disabled' title='Already applied'>Apply Now</span>";
+            }
+            ?>
+            
         </section>
 
         <footer>
