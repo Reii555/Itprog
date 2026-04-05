@@ -1,17 +1,14 @@
-<!-- 
- STATISTICS & REPORTS PAGE
-
- This page allows Super Admins, and other admins to view key statistics about scholarships and applications,
- as well as detailed reports on recent scholarships, applications, and approved scholars.
- Features include:
-    - Statistics section with total scholarships, total applicants, application status distribution, 
-      and applications per scholarship (with bar graphs)
-    - Reports section with separate tables for scholarships, applications, and approved scholars
-      sorted by most recent activity, and displays relevant details for each entry.
-    
--->
-
 <?php
+
+//  STATISTICS & REPORTS PAGE
+
+//  Provides admins reports and insights on both scholarships and applications, with visuals and sorted tables.
+//  Features include:
+//     - Statistics section with total scholarships, total applicants, application status distribution, 
+//       and applications per scholarship (with bar graphs)
+//     - Reports section with separate tables for scholarships, applications, and approved scholars
+//       sorted by most recent activity, and displays relevant details for each entry.
+// onion-40
 session_start();
 require '../../db_connect.php';
 

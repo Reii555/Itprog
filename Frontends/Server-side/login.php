@@ -1,8 +1,11 @@
 <?php
+// SERVER-SIDE LOGIN PAGE 
+// Displays the login form and handles user authentication for admin accounts in the CSP system.
+// onion-40
 session_start();
 include("../../db_connect.php");
 
-//$error = "";
+$error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, $_POST['email']);

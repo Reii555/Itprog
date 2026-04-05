@@ -1,9 +1,11 @@
 <?php
+// SCHOLARSHIP MANAGEMENT PAGE (server-side)
 // Manages scholarship records with CRUD operations
 // Features include: 
 // - search 
 // - pagination 
 // - summary statistics
+// onion-40
 session_start();
 include("../../db_connect.php");
 
