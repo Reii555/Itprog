@@ -142,10 +142,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
 
     <body>
         <section class="header">
-            <img src="../icons/CSP_logo.png" alt="logo" width="60" height="60" class="CSP-logo">
-            <div class="header-title">
-                <h1>Centralized Scholarship Portal</h1>
-            </div>
+            <img src="../icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
+            <strong>Centralized Scholarship Portal</strong>
             <span> / <a href="Server_Dashboard.php">Dashboard</a> / Manage Scholarships</span>
         </section>
 
