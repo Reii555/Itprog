@@ -27,6 +27,27 @@ body {
     width: 75px;
     height: auto;
     object-fit: contain;
+    flex-shrink: 0;   
+}
+
+.header strong {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.header span {
+    color: white;
+    font-size: 14px;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+}
+
+.header a:hover {
+    text-decoration: underline;
 }
 
 .header h3 {

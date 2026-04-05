@@ -1,3 +1,17 @@
+<!-- 
+
+SERVER DASHBOARD PAGE
+
+This file serves as the main dashboard for administrators after logging
+in. It displays key statistics about scholarships and applications, such 
+as total scholarships, active scholarships, total applicants, and pending 
+applications. The dashboard also provides navigation options for managing 
+scholarships, reviewing applications, and accessing statistics and reports. 
+Additionally, it includes a settings dropdown for logging out and calling 
+IT support.
+
+-->
+
 <?php
 session_start();
 include("../../db_connect.php");
