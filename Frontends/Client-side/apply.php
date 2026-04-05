@@ -1,5 +1,6 @@
 <?php
-// for creating first-time applications
+// CLIENT-SIDE
+// Helper php for creating first-time applications or redirecting to existing applications.
 
 session_start();
 include("../../db_connect.php");

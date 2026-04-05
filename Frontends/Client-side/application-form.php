@@ -1,6 +1,6 @@
 <?php
 // CLIENT-SIDE
-// Displays the scholarship application form with auto-filled user data
+// Displays the scholarship application form with auto-filled user data.
 // @alledelweiss
 
 session_start();
