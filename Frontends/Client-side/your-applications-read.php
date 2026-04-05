@@ -26,11 +26,13 @@ $application_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 $query = "SELECT a.*, s.title as scholarship_name, s.deadline, s.description,
           st.first_name, st.last_name, st.department, st.year_level, st.contact_num,
-          acc.email
+          acc.email, adm.email as reviewer_email
           FROM APPLICATIONS a
           JOIN SCHOLARSHIPS s ON a.scholarship_id = s.scholarship_id
           JOIN STUDENTS st ON a.student_id = st.student_id
           JOIN ACCOUNTS acc ON st.account_id = acc.account_id
+          LEFT JOIN ADMINISTRATORS admin ON a.reviewed_by = admin.admin_id
+          LEFT JOIN ACCOUNTS adm ON admin.account_id = adm.account_id
           WHERE a.application_id = $application_id AND a.student_id = $student_id";
 
 $result = mysqli_query($conn, $query);
@@ -134,7 +136,7 @@ if (!$application) {
                 <div class="profile-grid">
                     <div class="profile-item">
                         <p><strong>Reviewed by:</strong></p>
-                        <p><?php echo $application['reviewed_by'] ? 'Admin ID: ' . $application['reviewed_by'] : 'Not reviewed'; ?></p>
+                        <p><?php echo $application['reviewer_email'] ? 'Email: ' . $application['reviewer_email'] : 'Not reviewed'; ?></p>
                     </div>
                     <div class="profile-item">
                         <p><strong>Date reviewed:</strong></p>
