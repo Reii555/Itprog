@@ -224,7 +224,6 @@ if($is_super_admin) {
 
 <!-- Modal for Documents -->
 <?php
-// Check if we need to show the modal
 $show_modal = false;
 $modal_application_id = null;
 $modal_documents = [];
@@ -483,6 +482,3 @@ if(isset($_GET['view_docs']) && !empty($_GET['view_docs'])) {
 
 </body>
 </html>
-
-<!-- DEBUG: Role = '<?php echo $user_role; ?>' -->
-<!-- Super Admin check = <?php echo $is_super_admin ? 'TRUE' : 'FALSE'; ?> -->

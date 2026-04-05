@@ -277,7 +277,6 @@ tr:not(:first-child):nth-child(even) {
   color: white;
 }
 
-/* Modal Styles - Clean Flexbox Version */
 .modal {
     display: none;
     position: fixed;
@@ -351,7 +350,6 @@ tr:not(:first-child):nth-child(even) {
     flex: 1;
 }
 
-/* Application Info - Flexbox Layout */
 .modal-app-info {
     background-color: #f8f9fa;
     padding: 14px 16px;
@@ -388,7 +386,6 @@ tr:not(:first-child):nth-child(even) {
     font-size: 13px;
 }
 
-/* Status badge inside modal */
 .modal-app-info .status-badge {
     display: inline-block;
     padding: 2px 8px;
@@ -513,7 +510,6 @@ tr:not(:first-child):nth-child(even) {
     text-decoration: none;
 }
 
-/* Status Badge Styles (for consistency) */
 .status-badge {
     display: inline-block;
     padding: 4px 10px;
