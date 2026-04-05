@@ -1,9 +1,0 @@
-  colors used:
-
-  F1F3E0
-  A1BC98
-  799371
-  778873
-  7b8c78
-  D2DCB6
-  6b7a68
