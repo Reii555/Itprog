@@ -1,11 +1,13 @@
 <!-- 
  IT SUPPORT PAGE
 
- This file serves as the IT Support page for users to submit their IT-related 
- issues. It includes a form for users to describe their issue and a confirmation 
- modal that appears after submission, providing contact information for further 
- assistance. The page also checks the user's login status to determine the 
- appropriate navigation options after submitting a ticket.
+ This file serves as the IT Support page for users to submit their issues. 
+ Features include:
+- A form for users to describe their issue in detail.
+- A confirmation modal that appears after submitting the ticket, providing contact information for further assistance.
+- Conditional navigation options in the modal based on the user's login status (return to dashboard if logged
+in, return to login page if not).
+
 -->
 
 <?php

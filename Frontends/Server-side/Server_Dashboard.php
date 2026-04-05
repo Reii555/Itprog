@@ -3,12 +3,12 @@
 SERVER DASHBOARD PAGE
 
 This file serves as the main dashboard for administrators after logging
-in. It displays key statistics about scholarships and applications, such 
-as total scholarships, active scholarships, total applicants, and pending 
-applications. The dashboard also provides navigation options for managing 
-scholarships, reviewing applications, and accessing statistics and reports. 
-Additionally, it includes a settings dropdown for logging out and calling 
-IT support.
+in. 
+Features include:
+- Display of key statistics such as total scholarships, active scholarships, total applicants, and pending applications
+- A settings dropdown with options to logout and call for IT support
+- Action cards that link to scholarship management, application review, and statistics & reports pages
+- The statistics are retrieved from the database using SQL queries to count the relevant records.
 
 -->
 
