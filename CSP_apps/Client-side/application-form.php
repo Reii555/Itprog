@@ -213,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             if ($item !== '')
                                 echo "<li>" . htmlspecialchars($item) . "</li>";
                         }
-                        ?>
+                        ?> 
                     </ul>
 
                     <div class="form-group">
