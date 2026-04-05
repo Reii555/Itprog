@@ -3,14 +3,10 @@
 VIEW APPLICATION DOCUMENTS
 
 This file is responsible for displaying the documents associated with 
-a specific application. This is made so that when administrators review 
-applications, they can click on the document links to view the files 
-directly in the browser. This retrieves the document information from 
-the database based on the provided document ID and serves the file with 
-the appropriate headers to allow inline viewing for supported 
-file types (PDF, images) or force download for unsupported types. 
-If the document is not found, an error message is displayed with a 
-link to return to the applications page.
+a specific application.
+Features include:
+- Retrieval of document information from the database based on a provided document ID.
+- Error handling for cases where the document is not found or the file is missing on the server
 
 -->
 
