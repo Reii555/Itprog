@@ -1,7 +1,6 @@
 <?php
 // db_connect.php
 // Database connection file with testing data
-// @alledelweiss
 
 // Start session first
 if (session_status() === PHP_SESSION_NONE) {
