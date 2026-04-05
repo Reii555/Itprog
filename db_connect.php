@@ -11,7 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'CSP_database'; 
+$database = 'csp_database'; 
 
 $conn = mysqli_connect($host, $username, $password, $database);
 
