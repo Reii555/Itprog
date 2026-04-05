@@ -7,7 +7,7 @@
 // - summary statistics
 // onion-40
 session_start();
-include("../../db_connect.php");
+require("../../db_connect.php");
 
 //check login
 if(!isset($_SESSION['account_id'])){

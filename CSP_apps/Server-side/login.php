@@ -3,7 +3,7 @@
 // Displays the login form and handles user authentication for admin accounts in the CSP system.
 // onion-40
 session_start();
-include("../../db_connect.php");
+require("../../db_connect.php");
 
 $error = "";
 

@@ -5,7 +5,7 @@
 // @alledelweiss
 
 session_start();
-include("../../db_connect.php");
+require("../../db_connect.php");
 
 if(!isset($_SESSION['student_acc_id'])){
     header("Location: login.php");

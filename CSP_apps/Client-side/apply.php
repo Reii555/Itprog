@@ -3,7 +3,7 @@
 // Helper php for creating first-time applications or redirecting to existing applications.
 
 session_start();
-include("../../db_connect.php");
+require("../../db_connect.php");
 
 if (!isset($_SESSION['student_acc_id']) || !isset($_GET['scholarship_id'])) {
     header("Location: home.php");

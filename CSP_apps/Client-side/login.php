@@ -4,7 +4,7 @@
 // @isabel cubs
 
 session_start();
-include("../../db_connect.php");
+require("../../db_connect.php");
 
 if(isset($_POST['login'])) {
     $email = $_POST['email'];

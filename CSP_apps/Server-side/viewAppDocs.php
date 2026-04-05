@@ -13,7 +13,7 @@ Features include:
 -->
 
 <?php
-include("../../db_connect.php");
+require("../../db_connect.php");
 
 if(!isset($_GET['doc_id'])) {
     die('No document specified');
