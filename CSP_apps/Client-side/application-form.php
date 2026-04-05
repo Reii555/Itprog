@@ -203,8 +203,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <h3>Required Documents</h3>
                     <ul class="requirements-list">
-                        <?php 
-                        $requirements_str = str_replace("\r\n", "\n", $scholarship['requirements']);
+                        <?php
+                        $requirements_str = str_replace('\\r\\n', "\n", $scholarship['requirements']);
+
                         $requirements = explode("\n", $requirements_str);
 
                         foreach ($requirements as $item) {
