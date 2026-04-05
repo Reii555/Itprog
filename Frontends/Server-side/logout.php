@@ -1,3 +1,13 @@
+<!--
+
+LOGOUT 
+
+This file simply destroys the user's session and redirects 
+them to the login page. It is used when the user clicks the 
+"Logout" option in the settings dropdown on the dashboard.
+
+-->
+
 <?php
 session_start();
 

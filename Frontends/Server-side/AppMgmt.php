@@ -1,3 +1,16 @@
+<!-- 
+ APPLICATION MANAGEMENT PAGE
+
+ This page allows Super Admins, and other admins to manage scholarship applications.
+ Features include:
+    - Viewing all applications (Super Admin sees all, others see assigned/unassigned)
+    - Filtering applications by status, year level, scholarship, and sorting by date
+    - Changing application status with automatic reviewer assignment
+    - Super Admin can re-assign applications to different admins
+    - Viewing submitted documents in a modal without leaving the page
+    
+-->
+
 <?php
 session_start();
 include("../../db_connect.php");
