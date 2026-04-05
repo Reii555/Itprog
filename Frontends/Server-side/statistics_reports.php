@@ -1,12 +1,28 @@
+<!-- 
+ STATISTICS & REPORTS PAGE
+
+ This page allows Super Admins, and other admins to view key statistics about scholarships and applications,
+ as well as detailed reports on recent scholarships, applications, and approved scholars.
+ Features include:
+    - Statistics section with total scholarships, total applicants, application status distribution, 
+      and applications per scholarship (with bar graphs)
+    - Reports section with separate tables for scholarships, applications, and approved scholars
+      sorted by most recent activity, and displays relevant details for each entry.
+    
+-->
+
 <?php
+// starts
 session_start();
 require '../../db_connect.php';
 
+// checks if the user is logged in, if not redirects to login page
 if(!isset($_SESSION['account_id'])){
     header("Location: ./login.php");
     exit();
 }
 
+//get admin ID and role first
 $admin_id = null;
 $admin_name = '';
 $admin_query = mysqli_query($conn, "SELECT admin_id, first_name, last_name FROM administrators WHERE account_id = '" .
@@ -17,7 +33,9 @@ if($admin_query && mysqli_num_rows($admin_query) > 0){
     $admin_name = $admin_data['first_name'] . ' ' . $admin_data['last_name'];
 }
 
-//get statistics
+// ============================================
+// GET STATISTICS DATA
+// ============================================
 //total scholarships
 $total_scholarships_query = mysqli_query($conn, "SELECT COUNT(*) as total FROM scholarships");
 $total_scholarships = mysqli_fetch_assoc($total_scholarships_query)['total'];
@@ -44,7 +62,9 @@ while($row = mysqli_fetch_assoc($app_per_schol_query)){
     $scholarship_applications[] = $row;
 }
 
-//reports
+// ============================================
+// GET REPORTS DATA
+// ============================================
 //scholarship report
 $schol_report = "SELECT s.scholarship_id, s.title, s.deadline, s.status, 
                             COUNT(DISTINCT a.application_id) as total_applicants,
@@ -120,6 +140,7 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
                 <div class="chart-card">
                     <h3>Application Status</h3>
                     <div class="chart-placeholder">
+                        <!--  -->
                         <?php if(empty($status_data)): ?>
                             <p>No application data available.</p>
                         <?php else: ?>
