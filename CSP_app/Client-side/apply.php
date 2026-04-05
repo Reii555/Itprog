@@ -5,12 +5,12 @@
 session_start();
 include("../../db_connect.php");
 
-if (!isset($_SESSION['account_id']) || !isset($_GET['scholarship_id'])) {
+if (!isset($_SESSION['student_acc_id']) || !isset($_GET['scholarship_id'])) {
     header("Location: home.php");
     exit();
 }
 
-$account_id = $_SESSION['account_id'];
+$account_id = $_SESSION['student_acc_id'];
 $scholarship_id = (int)$_GET['scholarship_id'];
 
 // get student ID

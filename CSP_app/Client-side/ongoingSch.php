@@ -6,7 +6,7 @@
 session_start();
 include("../../db_connect.php");
 
-if(!isset($_SESSION['account_id'])){
+if(!isset($_SESSION['student_acc_id'])){
     header("Location: login.php");
     exit();
 }
@@ -28,7 +28,7 @@ if(mysqli_num_rows($result) == 0){
 
 $scholar = mysqli_fetch_assoc($result);
 
-$account_id = $_SESSION['account_id'];
+$account_id = $_SESSION['student_acc_id'];
 $getStudID = mysqli_query($conn, "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'");
 
 if ($getStudID && mysqli_num_rows($getStudID) > 0) {

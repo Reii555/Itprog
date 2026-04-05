@@ -7,12 +7,12 @@
 session_start();
 include("../../db_connect.php");
 
-if(!isset($_SESSION['account_id'])){
+if(!isset($_SESSION['student_acc_id'])){
     header("Location: login.php");
     exit();
 }
 
-$account_id = $_SESSION['account_id'];
+$account_id = $_SESSION['student_acc_id'];
 
 $query = "SELECT s.*, a.email 
           FROM STUDENTS s

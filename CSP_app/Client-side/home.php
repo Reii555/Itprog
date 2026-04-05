@@ -6,7 +6,7 @@
 session_start();
 include("../../db_connect.php");
 
-if(!isset($_SESSION['account_id'])){
+if(!isset($_SESSION['student_acc_id'])){
     header("Location: login.php");
     exit();
 }
@@ -14,7 +14,7 @@ if(!isset($_SESSION['account_id'])){
 $getOngoingSc = "SELECT * FROM SCHOLARSHIPS WHERE status='Ongoing' ORDER BY deadline ASC LIMIT 3";
 $ongoingSc = mysqli_query($conn, $getOngoingSc);
 
-$account_id = $_SESSION['account_id'];
+$account_id = $_SESSION['student_acc_id'];
 $getStudID = "SELECT student_id FROM STUDENTS WHERE account_id='$account_id'";
 $StudID = mysqli_query($conn, $getStudID);
 $cell = mysqli_fetch_assoc($StudID);
