@@ -3,7 +3,7 @@
 // Features include: 
 // - search 
 // - pagination 
-// summary statistics
+// - summary statistics
 session_start();
 include("../../db_connect.php");
 
