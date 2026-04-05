@@ -1,4 +1,9 @@
 <?php
+// Manages scholarship records with CRUD operations
+// Features include: 
+// - search 
+// - pagination 
+// summary statistics
 session_start();
 include("../../db_connect.php");
 
@@ -25,7 +30,9 @@ if($admin_result && mysqli_num_rows($admin_result) > 0){
 }
 mysqli_stmt_close($stmt);
 
-//add scholarship function
+// ============================================
+// ADD SCHOLARSHIP
+// ============================================
 if(isset($_POST['add'])){
     if($admin_id == null){
         $msg = "Error: Admin is not logged in.";
@@ -54,7 +61,9 @@ if(isset($_POST['add'])){
     }
 }
 
-//edit scholarship function
+// ============================================
+// EDIT SCHOLARSHIP
+// ============================================
 if(isset($_POST['edit'])){
     $id = (int)$_POST['id'];
     $title = mysqli_real_escape_string($conn, $_POST['title']);
@@ -78,7 +87,9 @@ if(isset($_POST['edit'])){
     mysqli_stmt_close($stmt);
 }
 
-//delete scholarship function
+// ============================================
+// DELETE SCHOLARSHIP
+// ============================================
 if(isset($_POST['delete'])){
     $id = (int)$_POST['id'];
 
@@ -95,7 +106,9 @@ if(isset($_POST['delete'])){
     mysqli_stmt_close($stmt);
 }
 
-//search using GET method
+// ============================================
+// SEARCH AND PAGINATION USING GET METHOD
+// ============================================
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
@@ -113,7 +126,9 @@ $total_row = mysqli_fetch_assoc($count_result);
 $total_items = $total_row['total'];
 $total_pages = ($total_items > 0) ? ceil($total_items / $limit) : 1;
 
-//get scholarships with admin creator name (w/ LEFT JOIN)
+// ============================================
+// GET SCHOLARSHIPS WITH CREATOR NAME (w/ LEFT JOIN)
+// ============================================
 $query = "SELECT s.*, CONCAT(a.first_name, ' ', a.last_name) as creator
         FROM scholarships s
         LEFT JOIN administrators a ON s.created_by = a.admin_id
@@ -122,7 +137,9 @@ $query = "SELECT s.*, CONCAT(a.first_name, ' ', a.last_name) as creator
         LIMIT $offset, $limit";
 $result = mysqli_query($conn, $query);
 
-//get the statistics for summary table
+// ============================================
+// STATISTICS FOR SUMMARY CARDS
+// ============================================
 $total_result = mysqli_query($conn, "SELECT COUNT(*) as c FROM scholarships");
 $total = mysqli_fetch_assoc($total_result)['c'];
 
@@ -420,6 +437,8 @@ $ongoing = mysqli_fetch_assoc($ongoing_result)['c'];
         </div>
 
           <script>
+            // script is for frontend interactions like selecting a row 
+            // and opening the add/edit/delete actions with pre-filled data for edit and delete
             let selectedRow = null;
 
             //select row function, for edit and delete scholarship function
