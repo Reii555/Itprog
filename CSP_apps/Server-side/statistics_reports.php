@@ -113,7 +113,7 @@ while($row = mysqli_fetch_assoc($approved_report_query)){
     </head>
     <body>
         <header class="header">
-    <img src="../../Frontends/icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
+    <img src="../icons/CSP_logo.png" alt="CSP Logo" class="CSP-logo">
     <strong>Centralized Scholarship Portal</strong>
     <span> / <a href="Server_Dashboard.php">Dashboard</a> / Statistics & Reports</span>
         </header>
