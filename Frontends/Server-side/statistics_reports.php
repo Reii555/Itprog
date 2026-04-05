@@ -22,7 +22,7 @@ if(!isset($_SESSION['account_id'])){
     exit();
 }
 
-//get admin ID and role first
+//get admin ID
 $admin_id = null;
 $admin_name = '';
 $admin_query = mysqli_query($conn, "SELECT admin_id, first_name, last_name FROM administrators WHERE account_id = '" .
